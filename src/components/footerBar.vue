@@ -1,7 +1,6 @@
 <template>
 
   <v-footer class="pa-3">
-   <v-spacer></v-spacer>
    <div><strong>Atelier 2</strong> Geoquizz - Cisiie.</div>
  </v-footer>
 

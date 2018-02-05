@@ -1,5 +1,5 @@
 <template>
-    <v-toolbar fixed app color="gray">
+    <v-toolbar app color="gray">
         <v-toolbar-title>GeoQuizz</v-toolbar-title>
     </v-toolbar>
 </template>
