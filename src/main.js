@@ -9,6 +9,7 @@ import Vue2Leaflet from 'vue2-leaflet'
 import Vuetify from 'vuetify'
 import ('../node_modules/vuetify/dist/vuetify.min.css')
 import colors from 'vuetify/es5/util/colors'
+
 Vue.use(Vuetify)
 
 window.axios = axios.create({
