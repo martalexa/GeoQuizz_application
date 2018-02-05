@@ -11,6 +11,10 @@ import ('../node_modules/vuetify/dist/vuetify.min.css')
 import colors from 'vuetify/es5/util/colors'
 Vue.use(Vuetify)
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2166aaa22d35c09c78aec4696e0c5055ea40163c
 window.axios = axios.create({
     baseURL: 'http://api.geoquizz.local:10080/',
 });
