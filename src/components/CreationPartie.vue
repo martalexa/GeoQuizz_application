@@ -47,7 +47,6 @@ export default {
 		}
 	},
 	components :{
-		//Toolbar
 	},
 	methods:{
 

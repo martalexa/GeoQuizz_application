@@ -1,35 +1,12 @@
 <template>
     <nav class="navbar is-dark">
-  <div class="navbar-brand">
-    <a class="navbar-item" href="https://bulma.io">
-
-        <i class="fas fa-map-marker-alt fa-2x"></i>
-        <p>Geoquizz</p>
-    </a>
-    <div class="navbar-burger burger" data-target="navMenuColordark-example">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-  </div>
-
-  <!-- <div id="navMenuColordark-example" class="navbar-menu">
-    <div class="navbar-end">
-      <div class="navbar-item">
-        <div class="field is-grouped">
-          <p class="control">
-            <router-link to="/connexion" class="button is-primary">
-                <span class="icon">
-                    <i class="fas fa-user"></i>
-                </span>
-                <span>Connexion</span>
-            </router-link>
-          </p>
-        </div>
+      <div class="navbar-brand">
+        <a class="navbar-item" href="/">
+            <i class="fas fa-map-marker-alt fa-2x"></i>
+            <p>Geoquizz</p>
+        </a>
       </div>
-    </div>
-  </div> -->
-</nav>
+    </nav>
 </template>
 
 
@@ -70,7 +47,3 @@ export default {
     }
 }
 </script>
-
-
-<style scoped>
-</style>
