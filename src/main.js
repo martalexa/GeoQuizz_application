@@ -10,14 +10,11 @@ import axios from 'axios'
 
 Vue.use(Buefy)
 
-Vue.component(Buefy.Checkbox.name, Buefy.Checkbox);
-Vue.component(Buefy.Table.name, Buefy.Table);
-Vue.component(Buefy.Switch.name, Buefy.Switch);
-
 window.axios = axios.create({
     baseURL: 'http://api.geoquizz.local:10080/',
 });
 Vue.config.productionTip = false
+Vue.use(Buefy)
 
 store.subscribe((mutation, state) => {
     localStorage.setItem('store', JSON.stringify(state));

@@ -2,6 +2,7 @@
     <nav class="navbar is-dark">
   <div class="navbar-brand">
     <a class="navbar-item" href="https://bulma.io">
+
         <i class="fas fa-map-marker-alt fa-2x"></i>
         <p>Geoquizz</p>
     </a>

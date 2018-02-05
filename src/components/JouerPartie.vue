@@ -1,21 +1,21 @@
 <template>
   <section>
-    <h1>Création partie</h1>
+    <h1>Jouer partie</h1>
 
-    </section>
+  </section>
 
 </template>
 
 <script>
 export default {
-	name: 'CreationPartie',
+	name: 'JouerPartie',
 	data () {
 		return {
 
 		}
 	},
 	components :{
-		//Toolbar
+
 	},
 	methods:{
 
