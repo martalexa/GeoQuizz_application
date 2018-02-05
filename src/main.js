@@ -5,9 +5,16 @@ import App from './App'
 import router from './router'
 import store from './store.js'
 import axios from 'axios'
-import Vue2Leaflet from 'vue2-leaflet';
+import Vue2Leaflet from 'vue2-leaflet'
+import Vuetify from 'vuetify'
+import ('../node_modules/vuetify/dist/vuetify.min.css')
+import colors from 'vuetify/es5/util/colors'
+Vue.use(Vuetify)
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> 2166aaa22d35c09c78aec4696e0c5055ea40163c
 window.axios = axios.create({
     baseURL: 'http://api.geoquizz.local:10080/',
 });
