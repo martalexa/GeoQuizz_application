@@ -1,10 +1,10 @@
 <template>
   <section>
       <div class="columns is-desktop">
-        <div class="column">
+        <div class="column container">
           <p class="carte">la petite carte</p>
         </div>
-        <div class="column">
+        <div class="column container">
           <p>Où se trouve cette photo ?</p>
           <img src="https://www.tourisme-lorraine.fr/sitlorimg/1920/0/aHR0cHM6Ly93d3cuc2l0bG9yLmZyL3Bob3Rvcy83MzcvNzM3MDAzNjg0XzE5LmpwZw==.jpg" alt="photo">
         </div>
@@ -24,15 +24,7 @@ export default {
 	},
 	components :{
 	},
-  mounted(){
-    win.onresize = coucou;;
-    console.log();
-  },
 	methods:{
-    coucou(){
-      console.log(window.innerWidth);
-    }
-
 	}
 }
 </script>
@@ -48,4 +40,6 @@ export default {
 
   height:75vh;
 }
+
+
 </style>

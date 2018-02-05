@@ -7,7 +7,11 @@ import Buefy from 'buefy'
 import 'buefy/lib/buefy.css'
 import store from './store.js'
 import axios from 'axios'
+import Vue2Leaflet from 'vue2-leaflet';
 
+Vue.component('v-map', Vue2Leaflet.Map);
+Vue.component('v-tilelayer', Vue2Leaflet.TileLayer);
+Vue.component('v-marker', Vue2Leaflet.Marker);
 Vue.use(Buefy)
 
 window.axios = axios.create({
