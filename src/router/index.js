@@ -7,22 +7,21 @@ import FinPartie from '@/components/FinPartie'
 Vue.use(Router)
 
 export default new Router({
-  routes: [
-    {
-      path: '/',
-      component: CreationPartie
-    },
-    {
-      path: '/creationpartie',
-      component: CreationPartie
-    },
-    {
-      path: '/jouerpartie',
-      component: JouerPartie
-    },
-    {
-      path: '/finpartie',
-      component: FinPartie
-    },
-  ]
+    routes: [{
+            path: '/creationpartie',
+            component: CreationPartie
+        },
+        {
+            path: '/jouerpartie',
+            component: JouerPartie
+        },
+        {
+            path: '/finpartie',
+            component: FinPartie
+        },
+        {
+            path: '*',
+            component: CreationPartie
+        }
+    ]
 })
