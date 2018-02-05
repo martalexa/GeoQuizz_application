@@ -19,7 +19,10 @@ export default {
 	},
 	methods:{
 	
-	}
+    },
+    mounted(){
+        this.$store.commit('setToken', 'bonjour')
+    }
 }
 </script>
 
