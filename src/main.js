@@ -8,10 +8,12 @@ import 'buefy/lib/buefy.css'
 import store from './store.js'
 import axios from 'axios'
 
+
 window.axios = axios.create({
     baseURL: 'http://api.geoquizz.local:10080/',
 });
 Vue.config.productionTip = false
+Vue.use(Buefy)
 
 store.subscribe((mutation, state) => {
     localStorage.setItem('store', JSON.stringify(state));
