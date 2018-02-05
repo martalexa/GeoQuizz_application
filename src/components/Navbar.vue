@@ -12,22 +12,22 @@
     </div>
   </div>
 
-  <div id="navMenuColordark-example" class="navbar-menu">
+  <!-- <div id="navMenuColordark-example" class="navbar-menu">
     <div class="navbar-end">
       <div class="navbar-item">
         <div class="field is-grouped">
           <p class="control">
-            <a class="button is-primary" href="https://github.com/jgthms/bulma/archive/0.5.1.zip">
-              <span class="icon">
-                <i class="fas fa-user"></i>
-              </span>
-              <span>Connexion</span>
-            </a>
+            <router-link to="/connexion" class="button is-primary">
+                <span class="icon">
+                    <i class="fas fa-user"></i>
+                </span>
+                <span>Connexion</span>
+            </router-link>
           </p>
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 </nav>
 </template>
 
