@@ -4,31 +4,23 @@
             <v-flex xs12 sm12 md6 lg3 xl3>
                 <v-btn color="primary" dark @click.stop="modal = true">Open Dialog 2</v-btn>
             </v-flex>
-            <v-flex xs12 sm12 md6 lg3 xl3>
-                <v-btn color="primary" dark @click.stop="modal = true">Open Dialog 2</v-btn>
+            <v-flex xs12 sm12 md6 lg3 xl3 v-for="serie in series" :key="serie.id">
+                <v-btn color="primary" dark @click.stop="modal = true, serie_id = serie.id">{{serie.city_id}}</v-btn>
             </v-flex>
-            <v-flex xs12 sm12 md6 lg3 xl3>
-                <v-btn color="primary" dark @click.stop="modal = true">Open Dialog 2</v-btn>
-            </v-flex>
-            <v-flex xs12 sm12 md6 lg3 xl3>
-                <v-btn color="primary" dark @click.stop="modal = true">Open Dialog 2</v-btn>
-            </v-flex>
-            <v-flex xs12 sm12 md6 lg3 xl3>
-                <v-btn color="primary" dark @click.stop="modal = true">Open Dialog 2</v-btn>
-            </v-flex>
-            <v-flex xs12 sm12 md6 lg3 xl3>
-                <v-btn color="primary" dark @click.stop="modal = true">Open Dialog 2</v-btn>
-            </v-flex>
+            
         </v-layout>
         <v-dialog v-model="modal" max-width="500px">
-          <v-card>
-            <form>
-                <v-text-field label="Pseudo" v-model="pseudo" required ></v-text-field>
-                <v-text-field label="Nombre de photos" v-model="nbImages" required></v-text-field> 
-                <v-btn @click="submit">submit</v-btn>
-                <v-btn @click="clear">clear</v-btn>
-            </form>
-          </v-card>
+            <v-card>
+                <v-card-text>
+                    <form>
+                        <v-text-field label="Pseudo" v-model="pseudo" required ></v-text-field>
+                        <v-text-field label="Nombre de photos" v-model="nbImages" required></v-text-field> 
+                        <v-btn @click="submit">submit</v-btn>
+                        <v-btn @click="clear">clear</v-btn>
+                    </form>
+                </v-card-text>
+                
+            </v-card>
         </v-dialog>
     </v-container>
 </template>
@@ -38,17 +30,37 @@ export default {
 	name: 'CreationPartie',
 	data () {
 		return {
+            series: [],
+            serie_id: '',
             modal: false,
             pseudo: '',
             nbImages: ''
 		}
 	},
-	components :{
+	mounted (){
+        window.axios.get('serie')
+			.then((response) => {
+                this.series = response.data
+			}).catch ((error) => {
+				console.log(error)
+			})
 	},
 	methods:{
         clear () {
             this.pseudo = ''
             this.nbImages = ''
+        },
+        submit(){
+            window.axios.post('parties', {
+                player_username : this.pseudo,
+                serie_id: this.serie_id,
+                nb_photos: this.nbImage
+			})
+			.then((response) => {
+                console.log('coucou')
+			}).catch ((error) => {
+				console.log(error)
+			})
         }
 	}
 }
@@ -56,13 +68,5 @@ export default {
 
 
 <style scoped>
- /*.column{
-    width: 25%;
-   height: auto;
-}
-@media screen and (max-width: 640px) {
-  .column {
-    width: 100%;
-  }
-}*/
+
 </style>
