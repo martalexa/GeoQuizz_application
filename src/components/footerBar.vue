@@ -1,14 +1,9 @@
 <template>
 
-  <footer class="footer footerBar">
-    <div class="container">
-      <div class="content has-text-centered">
-        <p>
-          <strong>Atelier 2</strong> Geoquizz - Cisiie.
-        </p>
-      </div>
-    </div>
-  </footer>
+  <v-footer class="pa-3">
+   <v-spacer></v-spacer>
+   <div><strong>Atelier 2</strong> Geoquizz - Cisiie.</div>
+ </v-footer>
 
 </template>
 
