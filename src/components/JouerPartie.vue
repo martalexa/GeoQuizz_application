@@ -1,7 +1,6 @@
 <template>
   <section>
-    <h1>Jouer la partie</h1>
-      <div class="columns is-mobile">
+      <div class="columns is-desktop">
         <div class="column">
           <p class="carte">la petite carte</p>
         </div>
@@ -25,7 +24,14 @@ export default {
 	},
 	components :{
 	},
+  mounted(){
+    win.onresize = coucou;;
+    console.log();
+  },
 	methods:{
+    coucou(){
+      console.log(window.innerWidth);
+    }
 
 	}
 }
@@ -33,10 +39,13 @@ export default {
 
 
 <style scoped>
+  section{
+    margin : 20px;
+  }
+
 .carte{
   border :1px solid black;
 
-  height:90vh;
-  margin-left:25px;
+  height:75vh;
 }
 </style>
