@@ -5,14 +5,24 @@ import App from './App'
 import router from './router'
 import Buefy from 'buefy'
 import 'buefy/lib/buefy.css'
+import store from './store.js'
+import axios from 'axios'
 
+window.axios = axios.create({
+    baseURL: 'http://api.geoquizz.local:10080/',
+});
+Vue.config.productionTip = false
+
+store.subscribe((mutation, state) => {
+    localStorage.setItem('store', JSON.stringify(state));
+});
 
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  router,
-  components: { App },
-  template: '<App/>'
+    el: '#app',
+    router,
+    components: { App },
+    template: '<App/>'
 })
