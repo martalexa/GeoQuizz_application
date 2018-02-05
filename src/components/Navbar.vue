@@ -1,12 +1,7 @@
 <template>
-    <nav class="navbar is-dark">
-      <div class="navbar-brand">
-        <a class="navbar-item" href="/">
-            <i class="fas fa-map-marker-alt fa-2x"></i>
-            <p>Geoquizz</p>
-        </a>
-      </div>
-    </nav>
+    <v-toolbar fixed app color="gray">
+        <v-toolbar-title>GeoQuizz</v-toolbar-title>
+    </v-toolbar>
 </template>
 
 
