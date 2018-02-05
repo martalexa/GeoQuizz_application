@@ -1,6 +1,8 @@
 <template>
-
+  <section>
     <h1>Bonjour</h1>
+
+    </section>
 
 </template>
 
@@ -11,18 +13,15 @@ export default {
 	name: 'CreationPartie',
 	data () {
 		return {
-			
+
 		}
 	},
 	components :{
 		//Toolbar
 	},
 	methods:{
-	
-    },
-    mounted(){
-        this.$store.commit('setToken', 'bonjour')
-    }
+
+	}
 }
 </script>
 
