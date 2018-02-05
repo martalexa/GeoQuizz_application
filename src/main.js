@@ -8,6 +8,7 @@ import 'buefy/lib/buefy.css'
 import store from './store.js'
 import axios from 'axios'
 
+Vue.use(Buefy)
 
 window.axios = axios.create({
     baseURL: 'http://api.geoquizz.local:10080/',
