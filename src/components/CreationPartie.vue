@@ -13,7 +13,7 @@
             <v-card>
                 <v-card-text>
                     <form>
-                        <v-text-field label="Pseudo" v-model="pseudo" required ></v-text-field>
+                        <v-text-field label="Pseudo" v-model="pseudo" required></v-text-field>
                         <v-text-field label="Nombre de photos" v-model="nbImages" required></v-text-field> 
                         <v-btn @click="submit">submit</v-btn>
                         <v-btn @click="clear">clear</v-btn>
