@@ -29,6 +29,6 @@ export default {
   }
   navbar{
     position:fixed;
-    z-index: 2;
+    z-index: 400000;
   }
 </style>
