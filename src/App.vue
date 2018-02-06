@@ -23,5 +23,5 @@ export default {
 </script>
 
 <style>
-
+  @import "leaflet/dist/leaflet.css";
 </style>
