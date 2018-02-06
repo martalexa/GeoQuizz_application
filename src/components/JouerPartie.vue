@@ -102,7 +102,6 @@ export default {
      this.$refs.map.mapObject.on('click', e => {
        console.log(e)
      })
-     L.setZIndex(0);
    },
 	methods:{
 	}

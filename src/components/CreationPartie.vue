@@ -11,13 +11,13 @@
                     <h2>{{serie_name}}</h2>
                 </v-card-title>
                 <v-card-text>
-                    <form>   
+                    <form>
                         <v-text-field label="Pseudo" v-model="pseudo" required></v-text-field>
                         <v-select :items="choix" label="Nombre de photos" item-value="text" v-model="nbImages"></v-select>
                         <v-btn @click="submit">submit</v-btn>
-                        <v-btn @click="clear">clear</v-btn>             
+                        <v-btn @click="clear">clear</v-btn>
                     </form>
-                </v-card-text> 
+                </v-card-text>
             </v-card>
         </v-dialog>
     </v-container>
@@ -84,5 +84,8 @@ export default {
 <style scoped>
     #serie{
         width: 100%;
+    }
+    .vue2leaflet-map{
+      position:relative;
     }
 </style>
