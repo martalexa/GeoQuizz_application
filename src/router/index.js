@@ -12,7 +12,7 @@ export default new Router({
             component: CreationPartie
         },
         {
-            path: '/jouerpartie/:id',
+            path: '/jouerpartie',
             component: JouerPartie
         },
         {
