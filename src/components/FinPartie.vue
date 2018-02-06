@@ -12,10 +12,10 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-if="score.nb_photos == '5'" v-for="(score, index) in score5" :key="score.id">
+            <tr v-if="score5.nb_photos == '5'" v-for="(score5, index) in scores5" :key="score5.id">
               <td>{{index+1}}</td>
-              <td>{{score.player_username}}</td>
-              <td>{{score.score}}</td>
+              <td>{{score5.player_username}}</td>
+              <td>{{score5.score}}</td>
             </tr>
           </tbody>
         </table>
@@ -31,10 +31,10 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-if="score.nb_photos == '10'" v-for="(score, index) in score10" :key="score.id">
+            <tr v-if="score10.nb_photos == '10'" v-for="(score10, index) in scores10" :key="score10.id">
               <td>{{index+1}}</td>
-              <td>{{score.player_username}}</td>
-              <td>{{score.score}}</td>
+              <td>{{score5.player_username}}</td>
+              <td>{{score5.score}}</td>
             </tr>
           </tbody>
         </table>
@@ -50,10 +50,10 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-if="score.nb_photos == '15'" v-for="(score, index) in score15" :key="score.id">
+            <tr v-if="score15.nb_photos == '15'" v-for="(score15, index) in scores15" :key="score15.id">
               <td>{{index+1}}</td>
-              <td>{{score.player_username}}</td>
-              <td>{{score.score}}</td>
+              <td>{{score5.player_username}}</td>
+              <td>{{score5.score}}</td>
             </tr>
           </tbody>
         </table>
@@ -69,9 +69,9 @@ export default {
   data () {
     return {
       scores: [],
-      score5: [],
-      score10: [],
-      score15: [],
+      scores5: [],
+      scores10: [],
+      scores15: [],
     }
   },
   components :{
@@ -85,16 +85,19 @@ export default {
         })*/
         response.data.forEach((score)=> {
           if(score.nb_photos == '5'){
-            //this.score5 += score
+            this.scores5 += score
             console.log('5')
+            console.log(score)
           }
           if(score.nb_photos == '10'){
-            //this.score10 += score
+            this.scores10 += score
             console.log('10')
+            console.log(score)
           }
           if(score.nb_photos == '15'){
-            //this.score15 += score
+            this.scores15 += score
             console.log('15')
+            console.log(score)
           }
           
         })

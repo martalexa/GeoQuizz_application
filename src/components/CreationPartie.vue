@@ -55,16 +55,26 @@ export default {
             this.nbImages = ''
         },
         submit(){
-            window.axios.post('parties', {
+            // window.axios.post('parties', {
+            //     player_username : this.pseudo,
+            //     serie_id: this.serie_id,
+            //     nb_photos: this.nbImages
+			// })
+			// .then((response) => {
+            //     console.log('coucou')
+			// }).catch ((error) => {
+			// 	console.log(error)
+            // })
+            
+            this.$store.dispatch('createPartie', {
                 player_username : this.pseudo,
                 serie_id: this.serie_id,
                 nb_photos: this.nbImages
-			})
-			.then((response) => {
-                console.log('coucou')
-			}).catch ((error) => {
-				console.log(error)
-			})
+			}).then((res) => {
+                this.$router.push({name: 'jouer'})
+            }).catch((err) => {
+
+            })
         }
 	}
 }

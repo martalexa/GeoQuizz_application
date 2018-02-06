@@ -13,6 +13,7 @@ export default new Router({
         },
         {
             path: '/jouerpartie',
+            name: 'jouer',
             component: JouerPartie
         },
         {
