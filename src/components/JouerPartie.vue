@@ -19,8 +19,8 @@
                 v-bind:value="value"
                 color="green"
                 >
-                  <div v-if="this.value === 0" class="perdu"><b>perdu</b></div>
-                  <div v-else>{{value}}</div>
+                <div v-if="this.value===0" class="perdu">perdu</div>
+                <div v-else>{{value}}</div>
             </v-progress-circular>
             </div>
           </div>
@@ -45,7 +45,7 @@
             <v-btn flat class="suivant">Question suivante</v-btn>
           </div>
 
-          <!-- Bouton fin de la partie : faire un v-if il a répendu à toutes les questions -->
+          <!-- Bouton fin de la partie : faire un v-if il a répondu à toutes les questions -->
           <div>
             <router-link to="/finpartie">fin de la partie</router-link>
           </div>
@@ -102,6 +102,7 @@ export default {
      this.$refs.map.mapObject.on('click', e => {
        console.log(e)
      })
+     L.setZIndex(0);
    },
 	methods:{
 	}
@@ -116,26 +117,9 @@ export default {
 .carte{
   border :1px solid black;
   height:70vh;
-  z-index: 1;
 }
 img{
     width : 100%;
-}
-.suivant{
-  position : absolute;
-  right:0;
-}
-.containerPhoto{
-  display: -ms-flexbox;
-	display: -webkit-flex;
-	display: flex;
-
-
-	-ms-flex-justify: center;
-	-webkit-justify: center;
-
-	justify-content: center;
-  width : 100%;
 }
 .photographie{
   padding-top:5vh;
@@ -145,6 +129,6 @@ img{
 }
 .perdu{
   color:red;
-
 }
+
 </style>
