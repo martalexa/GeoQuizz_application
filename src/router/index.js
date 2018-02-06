@@ -18,7 +18,8 @@ export default new Router({
         },
         {
             path: '/finpartie',
-            component: FinPartie
+            component: FinPartie,
+            name: 'fin'
         },
         {
             path: '*',

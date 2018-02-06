@@ -1,18 +1,23 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import api from '@/api'
+import ls from '@/services/ls'
+import persistedstate from 'vuex-persistedstate'
 
 Vue.use(Vuex);
 
 const initialState = {
     token: false,
-    partie: null
+    partie: null,
+    finished: false
 };
 
 export default new Vuex.Store({
+    plugins: [persistedstate()],
     state: {
         token: false,
-        partie: null
+        partie: null,
+        finished: false
     },
     mutations: {
         setToken(state, token) {
@@ -30,10 +35,15 @@ export default new Vuex.Store({
                     Object.assign(state, JSON.parse(localStorage.getItem('store')))
                 );
             }
+        },
+        setFinished(state, value) {
+            state.finished = value
         }
     },
     getters: {
-
+        getPartie: (state) => {
+            return state.partie
+        }
     },
     actions: {
         createPartie({ commit }, partie) {
@@ -46,6 +56,11 @@ export default new Vuex.Store({
             }).catch((err) => {
 
             })
+        },
+
+        finish({ commit }) {
+            commit('setFinished', true)
         }
+
     }
 })
