@@ -1,14 +1,14 @@
 <template>
   <div id="app">
-    
+
     <v-app light>
       <navbar></navbar>
       <v-container mt-5 id="main">
         <router-view ></router-view>
       </v-container>
       <footerBar></footerBar>
-    </v-app> 
-    
+    </v-app>
+
   </div>
 </template>
 

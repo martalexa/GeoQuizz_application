@@ -27,8 +27,8 @@ export default {
     text-decoration : none;
     color: black;
   }
-  navbar{
+  nav{
     position:fixed;
-    z-index: 400000;
+    z-index: 1100;
   }
 </style>
