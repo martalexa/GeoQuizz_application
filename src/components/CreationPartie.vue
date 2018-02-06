@@ -5,7 +5,7 @@
                 <v-btn color="primary" dark @click.stop="modal = true" id="serie">Open Dialog 2</v-btn>
             </v-flex>
             <v-flex xs12 sm12 md6 lg3 xl3 v-for="serie in series" :key="serie.id">
-                <v-btn color="primary" dark @click.stop="modal = true, serie_id = serie.id, serie_name = serie.city_id" id="serie">{{serie.city_id}}</v-btn>
+                <v-btn color="primary" dark @click.stop="modal = true, serie_id = serie.id, serie_name = serie.city_id" id="serie">{{serie.city_name}}</v-btn>
             </v-flex>
         </v-layout>
         <v-dialog v-model="modal" max-width="500px">
@@ -40,7 +40,7 @@ export default {
 		}
 	},
 	mounted (){
-        window.axios.get('serie')
+        window.axios.get('series')
 			.then((response) => {
                 this.series = response.data
 			}).catch ((error) => {
