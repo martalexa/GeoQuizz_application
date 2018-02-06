@@ -40,7 +40,6 @@ export default {
 	name: 'FinPartie',
 	data () {
 		return {
-
 		}
 	},
 	components :{
