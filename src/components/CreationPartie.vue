@@ -2,26 +2,26 @@
      <v-container grid-list-md text-xs-center>
         <v-layout row wrap>
             <v-flex xs12 sm12 md6 lg3 xl3>
-                <v-btn color="primary" dark @click.stop="modal = true">Open Dialog 2</v-btn>
+                <v-btn color="primary" dark @click.stop="modal = true" id="serie">Open Dialog 2</v-btn>
             </v-flex>
             <v-flex xs12 sm12 md6 lg3 xl3 v-for="serie in series" :key="serie.id">
-                <v-btn color="primary" dark @click.stop="modal = true, serie_id = serie.id">{{serie.city_id}}</v-btn>
+                <v-btn color="primary" dark @click.stop="modal = true, serie_id = serie.id, serie_name = serie.city_id" id="serie">{{serie.city_id}}</v-btn>
             </v-flex>
-
         </v-layout>
         <v-dialog v-model="modal" max-width="500px">
-<v-card>
+            <v-card>
+                <v-card-title>
+                    <h2>{{serie_name}}</h2>
+                </v-card-title>
                 <v-card-text>
-                    <form>
+                    <form>   
                         <v-text-field label="Pseudo" v-model="pseudo" required></v-text-field>
                         <v-text-field label="Nombre de photos" v-model="nbImages" required></v-text-field>
                         <v-btn @click="submit">submit</v-btn>
-                        <v-btn @click="clear">clear</v-btn>
+                        <v-btn @click="clear">clear</v-btn>             
                     </form>
-                </v-card-text>
-
+                </v-card-text> 
             </v-card>
-
         </v-dialog>
     </v-container>
 </template>
@@ -35,7 +35,8 @@ export default {
             serie_id: '',
             modal: false,
             pseudo: '',
-            nbImages: ''
+            nbImages: '',
+            serie_name: ''
 		}
 	},
 	mounted (){
@@ -69,5 +70,7 @@ export default {
 
 
 <style scoped>
-
+    #serie{
+        width: 100%;
+    }
 </style>
