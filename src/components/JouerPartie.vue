@@ -29,7 +29,7 @@
 
 
         <v-flex md12 lg7 offset-lg1>
-        
+
           <div class="column container">
             <div class="carte">
               <!-- Map -->
@@ -97,7 +97,8 @@ export default {
   }
 .carte{
   border :1px solid black;
-  height:75vh;
+  height:70vh;
+  z-index: 1;
 }
 img{
     width : 100%;
