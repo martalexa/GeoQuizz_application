@@ -12,16 +12,16 @@
               <img src="https://www.tourisme-lorraine.fr/sitlorimg/1920/0/aHR0cHM6Ly93d3cuc2l0bG9yLmZyL3Bob3Rvcy83MzcvNzM3MDAzNjg0XzE5LmpwZw==.jpg" alt="photo">
             </div>
             <div>
-              <v-progress-circular
-                  v-bind:size="100"
-                  v-bind:width="15"
-                  v-bind:rotate="180"
-                  v-bind:value="value"
-                  color="green"
-                  >
-                    <div v-if="this.value === 0" class="perdu"><b>perdu</b></div>
-                    <div v-else>{{value}}</div>
-              </v-progress-circular>
+            <v-progress-circular
+                v-bind:size="100"
+                v-bind:width="15"
+                v-bind:rotate="180"
+                v-bind:value="value"
+                color="green"
+                >
+                <div v-if="this.value===0" class="perdu">perdu</div>
+                <div v-else>{{value}}</div>
+            </v-progress-circular>
             </div>
           </div>
         </v-flex>
@@ -45,7 +45,7 @@
             <v-btn flat class="suivant">Question suivante</v-btn>
           </div>
 
-          <!-- Bouton fin de la partie : faire un v-if il a répendu à toutes les questions -->
+          <!-- Bouton fin de la partie : faire un v-if il a répondu à toutes les questions -->
           <div>
             <router-link to="/finpartie">fin de la partie</router-link>
           </div>
@@ -83,7 +83,7 @@ export default {
 	},
   beforeDestroy () {
      clearInterval(this.interval)
-   },
+  },
    mounted () {
      this.interval = setInterval(() => {
        if (this.value !== 0) {
@@ -91,22 +91,21 @@ export default {
        }
      }, 1000)
 
+     //console.log(window.L);
+     //let L = window.L;
+     //L.Marker(L.latLng(48.6843900, 6.1849600)).addTo(this.$refs.map.mapObject);
+     //L.Marker([48.6843900, 6.1849600]).addTo(this.$refs.map)
+     // console.log(this.$refs.map);
+     // let marker = Vue2Leaflet.marker([48.6843900, 6.1849600]).addTo(this.$refs.map.mapObject);
+     //L.Marker([48.6843900, 7.1849600]).addTo(this.$refs.map.mapObject)
+     L.marker([50.5, 30.5]).addTo(this.$refs.map.mapObject);
+     this.$refs.map.mapObject.on('click', e => {
+       console.log(e)
+     })
+     L.setZIndex(0);
    },
 	methods:{
-	},
-  mounted() {
-    //console.log(window.L);
-    //let L = window.L;
-    //L.Marker(L.latLng(48.6843900, 6.1849600)).addTo(this.$refs.map.mapObject);
-    //L.Marker([48.6843900, 6.1849600]).addTo(this.$refs.map)
-    // console.log(this.$refs.map);
-    // let marker = Vue2Leaflet.marker([48.6843900, 6.1849600]).addTo(this.$refs.map.mapObject);
-    //L.Marker([48.6843900, 7.1849600]).addTo(this.$refs.map.mapObject)
-    L.marker([50.5, 30.5]).addTo(this.$refs.map.mapObject);
-    this.$refs.map.mapObject.on('click', e => {
-      console.log(e)
-    })
-  }
+	}
 }
 </script>
 
@@ -118,26 +117,9 @@ export default {
 .carte{
   border :1px solid black;
   height:70vh;
-  z-index: 1;
 }
 img{
     width : 100%;
-}
-.suivant{
-  position : absolute;
-  right:0;
-}
-.containerPhoto{
-  display: -ms-flexbox;
-	display: -webkit-flex;
-	display: flex;
-
-
-	-ms-flex-justify: center;
-	-webkit-justify: center;
-
-	justify-content: center;
-  width : 100%;
 }
 .photographie{
   padding-top:5vh;
@@ -147,6 +129,6 @@ img{
 }
 .perdu{
   color:red;
-
 }
+
 </style>
