@@ -85,10 +85,10 @@ export default {
      clearInterval(this.interval)
   },
    mounted () {
-     this.interval = setInterval(() => {
-       if (this.value !== 0) {
+    this.interval = setInterval(() => {
+      if (this.value !== 0) {
         this.value -= 5
-       }
+      }
      }, 1000)
 
      //console.log(window.L);
