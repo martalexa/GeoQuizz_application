@@ -2,7 +2,14 @@
   <section>
       <div class="columns is-desktop">
         <div class="column container">
-          <p class="carte">la petite carte</p>
+          <div class="carte">
+            <!-- Map -->
+            <v-map ref="map" :zoom="13" :center="[48.6843900, 6.1849600]">
+                <v-tilelayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></v-tilelayer>
+                <v-marker :lat-lng="[48.6843900, 6.1849600]"></v-marker>
+            </v-map>
+            <!-- End Map -->
+          </div>
         </div>
         <div class="column container">
           <p>Où se trouve cette photo ?</p>
@@ -18,6 +25,14 @@
 </template>
 
 <script>
+
+import Vue from 'vue'
+import Vue2Leaflet from 'vue2-leaflet'
+
+Vue.component('v-map', Vue2Leaflet.Map);
+Vue.component('v-tilelayer', Vue2Leaflet.TileLayer);
+Vue.component('v-marker', Vue2Leaflet.Marker);
+
 export default {
 	name: 'JouerPartie',
 	data () {
@@ -38,10 +53,10 @@ export default {
     margin : 20px;
   }
 
-.carte{
-  border :1px solid black;
-  height:75vh;
-}
+  .carte{
+    border :1px solid black;
+    height:50vh;
+  }
 
 
 </style>
