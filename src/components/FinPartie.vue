@@ -39,8 +39,14 @@ export default {
   mounted(){
     window.axios.get('parties')
       .then((response) => {
-        this.scores = response.data
-        //for(let i = 10)
+        this.scores = response.data.sort(function(a, b) {
+            return a.score - b.score
+        })
+        
+        console.log(this.scores)
+      })
+      .then(function(){
+        
       })
       .catch ((error) => {
         console.log(error)
