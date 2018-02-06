@@ -1,11 +1,8 @@
 <template>
      <v-container grid-list-md text-xs-center>
         <v-layout row wrap>
-            <v-flex xs12 sm12 md6 lg3 xl3>
-                <v-btn color="primary" dark @click.stop="modal = true" id="serie">Open Dialog 2</v-btn>
-            </v-flex>
             <v-flex xs12 sm12 md6 lg3 xl3 v-for="serie in series" :key="serie.id">
-                <v-btn color="primary" dark @click.stop="modal = true, serie_id = serie.id, serie_name = serie.city_id" id="serie">{{serie.city_name}}</v-btn>
+                <v-btn color="primary" dark @click.stop="modal = true, serie_id = serie.id, serie_name = serie.city_name" id="serie">{{serie.city_name}}</v-btn>
             </v-flex>
         </v-layout>
         <v-dialog v-model="modal" max-width="500px">
@@ -16,7 +13,7 @@
                 <v-card-text>
                     <form>   
                         <v-text-field label="Pseudo" v-model="pseudo" required></v-text-field>
-                        <v-text-field label="Nombre de photos" v-model="nbImages" required></v-text-field>
+                        <v-select :items="choix" label="Nombre de photos" item-value="text" v-model="nbImages"></v-select>
                         <v-btn @click="submit">submit</v-btn>
                         <v-btn @click="clear">clear</v-btn>             
                     </form>
@@ -36,7 +33,12 @@ export default {
             modal: false,
             pseudo: '',
             nbImages: '',
-            serie_name: ''
+            serie_name: '',
+            choix: [
+                { text: '5' },
+                { text: '10' },
+                { text: '15' }
+            ]
 		}
 	},
 	mounted (){
@@ -56,7 +58,7 @@ export default {
             window.axios.post('parties', {
                 player_username : this.pseudo,
                 serie_id: this.serie_id,
-                nb_photos: this.nbImage
+                nb_photos: this.nbImages
 			})
 			.then((response) => {
                 console.log('coucou')
