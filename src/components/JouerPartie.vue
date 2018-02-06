@@ -61,6 +61,13 @@
 
 import Vue from 'vue'
 import Vue2Leaflet from 'vue2-leaflet'
+delete L.Icon.Default.prototype._getIconUrl;
+
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+  iconUrl: require('leaflet/dist/images/marker-icon.png'),
+  shadowUrl: require('leaflet/dist/images/marker-shadow.png')
+});
 
 Vue.component('v-map', Vue2Leaflet.Map);
 Vue.component('v-tilelayer', Vue2Leaflet.TileLayer);
@@ -70,12 +77,33 @@ export default {
 	name: 'JouerPartie',
 	data () {
 		return {
+      Icon: L.icon({
+           iconUrl: 'https://unpkg.com/leaflet@1.3.1/dist/images/marker-icon.png',
+           iconSize: [38, 95],
+           iconAnchor: [22, 94],
+           popupAnchor: [-3, -76],
+           shadowSize: [68, 95],
+           shadowAnchor: [22, 94]
+       })
 		}
 	},
 	components :{
 	},
 	methods:{
-	}
+	},
+  mounted() {
+    //console.log(window.L);
+    //let L = window.L;
+    //L.Marker(L.latLng(48.6843900, 6.1849600)).addTo(this.$refs.map.mapObject);
+    //L.Marker([48.6843900, 6.1849600]).addTo(this.$refs.map)
+    // console.log(this.$refs.map);
+    // let marker = Vue2Leaflet.marker([48.6843900, 6.1849600]).addTo(this.$refs.map.mapObject);
+    //L.Marker([48.6843900, 7.1849600]).addTo(this.$refs.map.mapObject)
+    L.marker([50.5, 30.5]).addTo(this.$refs.map.mapObject);
+    this.$refs.map.mapObject.on('click', e => {
+      console.log(e)
+    })
+  }
 }
 </script>
 
