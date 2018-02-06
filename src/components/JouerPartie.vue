@@ -8,9 +8,19 @@
             <div>
               <h2>Où se trouve cette photo sur la carte ?</h2>
             </div>
-            <div class="containerPhoto">
-              <img src="https://www.tourisme-lorraine.fr/sitlorimg/1920/0/aHR0cHM6Ly93d3cuc2l0bG9yLmZyL3Bob3Rvcy83MzcvNzM3MDAzNjg0XzE5LmpwZw==.jpg" alt="photo">
+
+            <div>
+              <h2>{{message}}</h2>
             </div>
+
+            <div v-if="partie != undefined">
+              <div v-for="(photo, index) in partie.serie.photos" :key="photo.id">
+                  <div v-if="index == currentIndex" class="containerPhoto">
+                      <img :src="photo.url" :alt="photo.description">
+                  </div>
+              </div>
+            </div>
+
             <div>
             <v-progress-circular
                 v-bind:size="100"
@@ -61,6 +71,9 @@
 
 import Vue from 'vue'
 import Vue2Leaflet from 'vue2-leaflet'
+import {mapGetters} from 'vuex'
+
+
 delete L.Icon.Default.prototype._getIconUrl;
 
 L.Icon.Default.mergeOptions({
@@ -78,7 +91,10 @@ export default {
 	data () {
 		return {
       interval: {},
-      value: 100
+      value: 100,
+      currentIndex: 0,
+      score: [],
+      message: ""
 		}
 	},
   beforeDestroy () {
@@ -91,20 +107,47 @@ export default {
       }
      }, 1000)
 
-     //console.log(window.L);
-     //let L = window.L;
-     //L.Marker(L.latLng(48.6843900, 6.1849600)).addTo(this.$refs.map.mapObject);
-     //L.Marker([48.6843900, 6.1849600]).addTo(this.$refs.map)
-     // console.log(this.$refs.map);
-     // let marker = Vue2Leaflet.marker([48.6843900, 6.1849600]).addTo(this.$refs.map.mapObject);
-     //L.Marker([48.6843900, 7.1849600]).addTo(this.$refs.map.mapObject)
+     let selectedPosition = null
      L.marker([50.5, 30.5]).addTo(this.$refs.map.mapObject);
      this.$refs.map.mapObject.on('click', e => {
-       console.log(e)
+       selectedPosition = {lat: e.latlng.lat, lng: e.latlng.lng};
+       let d = this.getDistance(selectedPosition, {lat: 48.6843900, lng: 6.1849600});
+       this.score.push({id: this.currentIndex, distance: d});
+       this.currentIndex ++;
+       if(this.currentIndex == this.partie.serie.photos.length){
+         this.message = "Bravo!";
+         this.$store.dispatch('finish').then(res => {
+            this.$router.push({name: 'fin'})
+         })
+       }
      })
    },
 	methods:{
-	}
+    getDistance(pos1, pos2) {
+      let R = 6371000; // Radius of the earth in km
+      let dLat = this.deg2rad(pos2.lat - pos1.lat);  // deg2rad below
+      let dLon = this.deg2rad(pos2.lng - pos1.lng); 
+      let a = 
+        Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.cos(this.deg2rad(pos1.lat)) * Math.cos(this.deg2rad(pos2.lat)) * 
+        Math.sin(dLon/2) * Math.sin(dLon/2)
+        ; 
+      let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      let d = R * c; // Distance in km
+      return d;
+    },
+    deg2rad(deg){
+      return deg * (Math.PI/180)
+    }
+  },
+  computed: {
+    ...mapGetters({partie: 'getPartie', finished: 'finished'})
+  },
+  beforeCreate() {
+    if(finished != undefined && finished == true){
+      this.$router.push({name: 'fin'});
+    }
+  }
 }
 </script>
 

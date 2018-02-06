@@ -41,6 +41,12 @@ export default {
             ]
 		}
 	},
+    created(){
+        // let router = this.$router;
+        // setTimeout(function() {
+        //     router.push({'name': 'jouer'})
+        // }, 5000);
+    },
 	mounted (){
         window.axios.get('series')
 			.then((response) => {
