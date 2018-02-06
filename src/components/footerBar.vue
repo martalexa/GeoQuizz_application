@@ -1,5 +1,6 @@
 <template>
 
+
   <v-footer class="footerBar">
    <div><strong>Atelier 2</strong> Geoquizz - Cisiie.</div>
    <div>Yann Dumas - Nicolas Bobelet - Mohamed Alhasne - Daniel Ricklin - Alexandra Martin</div>
