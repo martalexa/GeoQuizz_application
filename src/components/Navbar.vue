@@ -1,5 +1,5 @@
 <template>
-    <v-toolbar fixed app color="gray">
+    <v-toolbar fixed app color="gray" class="navbar">
         <v-toolbar-title>
           <h1>
             <router-link to="/creationpartie">
@@ -26,6 +26,9 @@ export default {
   a {
     text-decoration : none;
     color: black;
-
+  }
+  navbar{
+    position:fixed;
+    z-index: 2;
   }
 </style>
