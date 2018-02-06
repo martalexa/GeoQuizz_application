@@ -1,53 +1,62 @@
 <template>
-  <section>
-    <h1>Fin partie</h1>
-		<table class="table is-striped">
+  <v-container grid-list-md text-xs-center>
+    <v-layout row wrap>
+      <v-flex xs12 sm12 md12 lg6 xl6>
+        <h1>Fin partie</h1>
+        <table class="table is-striped">
           <thead>
             <tr>
               <th>Position</th>
+              <th>Pseudo</th>
               <th>Nombre de points</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>56</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>45</td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>78</td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td>58</td>
-            </tr>
-            <tr>
-              <td>5</td>
-              <td>59</td>
+            <tr v-for="score in scores" :key="score.id">
+              <td>rien</td>
+              <td>{{score.player_username}}</td>
+              <td>{{score.score}}</td>
             </tr>
           </tbody>
         </table>
-  </section>
+      </v-flex>
+    </v-layout>
+  </v-container>
 
 </template>
 
 <script>
 export default {
-	name: 'FinPartie',
-	data () {
-		return {
-		}
-	},
-	components :{
+  name: 'FinPartie',
+  data () {
+    return {
+      scores: []
+    }
+  },
+  components :{
 
-	},
-	methods:{
-
-	}
+  },
+  mounted(){
+    window.axios.get('parties')
+      .then((response) => {
+        this.scores = response.data
+        //for(let i = 10)
+      })
+      .catch ((error) => {
+        console.log(error)
+      })
+  },
+  methods:{
+    getScore(){
+      window.axios.get('parties')// plus id de la partie
+      .then((response) => {
+        console.log(response.data)
+      })
+      .catch ((error) => {
+        console.log(error)
+      })
+    }
+  }
 }
 </script>
 
