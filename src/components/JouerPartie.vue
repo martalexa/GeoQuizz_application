@@ -40,9 +40,8 @@
           <div class="column container" id="carte">
             <div class="carte">
               <!-- Map -->
-              <v-map ref="map" :zoom="13" :center="[48.6843900, 6.1849600]">
+              <v-map ref="map" :zoom="12.5" :center="[48.6843900, 6.1677822]">
                   <v-tilelayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></v-tilelayer>
-                  <v-marker :lat-lng="[48.6843900, 6.1849600]"></v-marker>
               </v-map>
               <!-- End Map -->
             </div>
@@ -113,10 +112,11 @@ export default {
         this.message="Bravo, vous avez répondu à toutes les questions"
         this.dialog2=true*/
       }
-     }, 100)
+     }, 1000)
 
      let selectedPosition = null
-     L.marker([50.5, 30.5]).addTo(this.$refs.map.mapObject);
+    // L.marker([50.5, 30.5]).addTo(this.$refs.map.mapObject);
+     L.marker([48.6843900, 6.1849600]).addTo(this.$refs.map.mapObject)
      this.$refs.map.mapObject.on('click', e => {
        selectedPosition = {lat: e.latlng.lat, lng: e.latlng.lng};
        let d = this.getDistance(selectedPosition, {lat: 48.6843900, lng: 6.1849600});
