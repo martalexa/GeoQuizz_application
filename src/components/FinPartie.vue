@@ -1,5 +1,6 @@
 <template>
   <v-container grid-list-md text-xs-center>
+    <h1>Meilleurs scores</h1>
     <v-layout row wrap>
       <v-flex xs12 sm12 md12 lg4 xl4>
         <h1>5 images</h1>
@@ -12,10 +13,10 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-if="score5.nb_photos == '5'" v-for="(score5, index) in scores5" :key="score5.id">
+            <tr v-for="(score5, index) in scores5.slice(0,10)" :key="score5.id">
               <td>{{index+1}}</td>
-              <td>{{score5.player_username}}</td>
-              <td>{{score5.score}}</td>
+              <td>{{score5.res.player_username}}</td>
+              <td>{{score5.res.score}}</td>
             </tr>
           </tbody>
         </table>
@@ -31,10 +32,10 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-if="score10.nb_photos == '10'" v-for="(score10, index) in scores10" :key="score10.id">
+            <tr v-for="(score10, index) in scores10.slice(0,10)" :key="score10.id">
               <td>{{index+1}}</td>
-              <td>{{score5.player_username}}</td>
-              <td>{{score5.score}}</td>
+              <td>{{score10.res.player_username}}</td>
+              <td>{{score10.res.score}}</td>
             </tr>
           </tbody>
         </table>
@@ -50,10 +51,10 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-if="score15.nb_photos == '15'" v-for="(score15, index) in scores15" :key="score15.id">
+            <tr v-for="(score15, index) in scores15.slice(0,10)" :key="score15.id">
               <td>{{index+1}}</td>
-              <td>{{score5.player_username}}</td>
-              <td>{{score5.score}}</td>
+              <td>{{score15.res.player_username}}</td>
+              <td>{{score15.res.score}}</td>
             </tr>
           </tbody>
         </table>
@@ -80,39 +81,33 @@ export default {
   created(){
     window.axios.get('parties')
       .then((response) => {
-        /*this.scores = response.data.sort(function(a, b) {
-            return a.score + b.score
-        })*/
-        response.data.forEach((score)=> {
-          if(score.nb_photos == '5'){
-            this.scores5 += score
-            console.log('5')
-            console.log(score)
+        response.data.forEach((res)=> {
+          if(res.nb_photos == '5'){
+            this.scores5.push({res})
           }
-          if(score.nb_photos == '10'){
-            this.scores10 += score
-            console.log('10')
-            console.log(score)
+          if(res.nb_photos == '10'){
+            this.scores10.push({res})
           }
-          if(score.nb_photos == '15'){
-            this.scores15 += score
-            console.log('15')
-            console.log(score)
+          if(res.nb_photos == '15'){
+            this.scores15.push({res})
           }
-          
         })
-      })
-      .then(()=>{
-        /*this.score5.slice(0,10)
-        this.score10.slice(0,10)
-        this.score15.slice(0,10)*/
+        this.scores5.sort(function(a, b) {
+              return b.res.score - a.res.score
+        })
+        this.scores10.sort(function(a, b) {
+              return b.res.score - a.res.score
+        })
+        this.scores10.sort(function(a, b) {
+              return b.res.score - a.res.score
+        })
       })
       .catch ((error) => {
         console.log(error)
       })
   },
   mounted(){
-    
+      
   },
   methods:{
     getScore(){

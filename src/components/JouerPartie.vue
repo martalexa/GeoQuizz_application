@@ -182,6 +182,9 @@ img{
   color:grey;
 }
 .findepartie{
-  z-index:1000;
+  z-index:100;
+}
+#carte{
+  z-index:1;
 }
 </style>
