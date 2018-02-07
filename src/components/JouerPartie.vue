@@ -5,15 +5,16 @@
 
         <v-flex lg4 xs12>
           <div class="photographie">
-            <div>
-              <h2>Où se trouve cette photo sur la carte ?</h2>
-            </div>
-
-
             <div v-if="partie != undefined">
               <div v-for="(photo, index) in partie.serie.photos" :key="photo.id">
+
                   <div v-if="index == currentIndex" class="containerPhoto">
+                    <div>
+                      <div>
+                        <h2>Où se trouve cette photo sur la carte ?</h2>
+                      </div>
                       <img :src="photo.url" :alt="photo.description">
+                    </div>
                   </div>
               </div>
             </div>
@@ -36,21 +37,17 @@
 
 
         <v-flex lg7 offset-lg1 xs12>
-
-          <div class="column container" id="carte">
+          <div class="column container" id="carte" @click="chrono">
             <div class="carte">
               <!-- Map -->
-              <v-map ref="map" :zoom="12.5" :center="[48.6843900, 6.1677822]">
-                  <v-tilelayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></v-tilelayer>
-              </v-map>
+                <v-map ref="map" :zoom="12.5" :center="[48.6843900, 6.1677822]">
+                    <v-tilelayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></v-tilelayer>
+                </v-map>
               <!-- End Map -->
             </div>
           </div>
-
-          <div v-if="this.value === 0">
-            <v-btn flat class="suivant">Question suivante</v-btn>
-          </div>
         </v-flex>
+
       </v-layout>
     </v-container>
 
@@ -108,14 +105,17 @@ export default {
     this.interval = setInterval(() => {
       if (this.value !== 0) {
         this.value -= 5
-/*      }if(this.dialog2 == false){
-        this.message="Bravo, vous avez répondu à toutes les questions"
-        this.dialog2=true*/
+
+      }else{
+        this.currentIndex ++
+        if(this.currentIndex=== this.partie.serie.photos.length){
+          this.$router.push('/finpartie')
+        }
+          this.value =100
       }
      }, 1000)
 
      let selectedPosition = null
-    // L.marker([50.5, 30.5]).addTo(this.$refs.map.mapObject);
      L.marker([48.6843900, 6.1849600]).addTo(this.$refs.map.mapObject)
      this.$refs.map.mapObject.on('click', e => {
        selectedPosition = {lat: e.latlng.lat, lng: e.latlng.lng};
@@ -124,14 +124,16 @@ export default {
        this.currentIndex ++;
        if(this.currentIndex == this.partie.serie.photos.length){
          this.$store.dispatch('finish').then(res => {
-            this.$router.push({name: 'fin'})
+          //  this.message="Bravo, vous avez répondu à toutes les questions"
+          //  this.dialog2=true
+              this.$router.push({name: 'fin'})
          })
        }
      })
    },
 	methods:{
     getDistance(pos1, pos2) {
-      let R = 6371000; // Radius of the earth in km
+      let R = 6371000; // Radius of the earth in m
       let dLat = this.deg2rad(pos2.lat - pos1.lat);  // deg2rad below
       let dLon = this.deg2rad(pos2.lng - pos1.lng);
       let a =
@@ -140,11 +142,14 @@ export default {
         Math.sin(dLon/2) * Math.sin(dLon/2)
         ;
       let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-      let d = R * c; // Distance in km
+      let d = R * c; // Distance in m
       return d;
     },
     deg2rad(deg){
       return deg * (Math.PI/180)
+    },
+    chrono(){
+      this.value=100;
     }
   },
   computed: {
@@ -155,12 +160,12 @@ export default {
 
 
 <style scoped>
-  section{
-    margin : 20px;
-  }
+section{
+  margin : 20px;
+}
 .carte{
   border :1px solid black;
-  height:70vh;
+  height:75vh;
 }
 img{
     width : 100%;
@@ -182,9 +187,12 @@ img{
   color:grey;
 }
 .findepartie{
-  z-index:100;
+  z-index:10000;
 }
 #carte{
   z-index:1;
+}
+.cache{
+  visibility: hidden;
 }
 </style>
