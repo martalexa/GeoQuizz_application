@@ -3,7 +3,7 @@
     <v-container grid-list-md text-xs-center>
       <v-layout row wrap>
 
-        <v-flex md12 lg4>
+        <v-flex lg4 xs12>
           <div class="photographie">
             <div>
               <h2>Où se trouve cette photo sur la carte ?</h2>
@@ -35,7 +35,7 @@
 
 
 
-        <v-flex md12 lg7 offset-lg1>
+        <v-flex lg7 offset-lg1 xs12>
 
           <div class="column container" id="carte">
             <div class="carte">
@@ -109,9 +109,9 @@ export default {
     this.interval = setInterval(() => {
       if (this.value !== 0) {
         this.value -= 5
-      }else{
+/*      }if(this.dialog2 == false){
         this.message="Bravo, vous avez répondu à toutes les questions"
-        this.dialog2=true
+        this.dialog2=true*/
       }
      }, 100)
 
