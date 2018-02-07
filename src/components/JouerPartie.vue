@@ -142,11 +142,6 @@ export default {
   },
   computed: {
     ...mapGetters({partie: 'getPartie', finished: 'finished'})
-  },
-  beforeCreate() {
-    if(finished != undefined && finished == true){
-      this.$router.push({name: 'fin'});
-    }
   }
 }
 </script>
