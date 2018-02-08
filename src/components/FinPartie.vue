@@ -62,7 +62,11 @@
       </v-flex>
     </v-layout>
     <router-link to="/" flat color="dark grey"  class="btn">Jouer une nouvelle partie</router-link>
-    {{scoreFinal}}
+
+      <div v-for="leScore in scoreFinal">
+        {{leScore.id}}
+      </div>
+
 
   </v-container>
 

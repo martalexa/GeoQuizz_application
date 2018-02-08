@@ -92,13 +92,11 @@ export default {
 		return {
       interval: {},
       value: 100,
-      tempsInit : 100,
+      tempsInit:100,
       currentIndex: 0,
       score: [],
       message: "",
-      dialog2 :false,
-      duree : [],
-      distance : []
+      dialog2 :false
 		}
 	},
   beforeDestroy () {
@@ -109,9 +107,8 @@ export default {
       if (this.value !== 0) {
         this.value -= 5
       }else{
-        this.duree.push(0)
-        console.log(this.duree)
-        this.currentIndex ++
+
+        this.score.push({'id': ++this.currentIndex, 'temps' : this.tempsInit, 'distance' : false})
 
         if(this.currentIndex=== this.partie.serie.photos.length){
           this.$router.push('/finpartie')
@@ -136,27 +133,20 @@ export default {
           }
        }, d)
 
-
        /* Calcul du temps restant en seconde */
        let t = this.tempsInit - this.value
        t = t / 5
 
-       console.log(t)
+       /* push dans le tableau des scores */
+       this.score.push({'id': ++this.currentIndex, 'temps' : t++, 'distance' : d, score : '66'})
 
-       this.score.push({'id': this.currentIndex, 'temps' : t, 'distance' : d})
-       console.log('SCORE : ' + this.score)
-
-
-    //   this.score.push({id: this.currentIndex, distance: d});
-       this.currentIndex ++;
 
        if(this.currentIndex == this.partie.serie.photos.length){
-         this.$store.dispatch('finish').then(res => {
-        //  this.score.push({'distance': this.duree, 'temps' : this.distance});
+         this.$store.dispatch('finish').then(res => {;
             this.setScore()
-            this.message="Bravo, vous avez répondu à toutes les questions"
-            this.dialog2=true
-        //  this.$router.push({name: 'fin'})
+        //  this.message="Bravo, vous avez répondu à toutes les questions"
+        //  this.dialog2=true
+            this.$router.push({name: 'fin'})
          })
        }
      })
