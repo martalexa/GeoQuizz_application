@@ -62,11 +62,14 @@
       </v-flex>
     </v-layout>
     <router-link to="/" flat color="dark grey"  class="btn">Jouer une nouvelle partie</router-link>
+    {{scoreFinal}}
+
   </v-container>
 
 </template>
 
 <script>
+import{mapGetters} from 'vuex'
 export default {
   name: 'FinPartie',
   data () {
@@ -76,9 +79,6 @@ export default {
       scores10: [],
       scores15: [],
     }
-  },
-  components :{
-
   },
   created(){
     window.axios.get('parties')
@@ -108,16 +108,8 @@ export default {
         console.log(error)
       })
   },
-  methods:{
-    getScore(){
-      window.axios.get('parties')// plus id de la partie
-      .then((response) => {
-        console.log(response.data)
-      })
-      .catch ((error) => {
-        console.log(error)
-      })
-    }
+  computed: {
+    ...mapGetters({scoreFinal: 'getScore'})
   }
 }
 </script>

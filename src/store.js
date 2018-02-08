@@ -9,7 +9,8 @@ Vue.use(Vuex);
 const initialState = {
     token: false,
     partie: null,
-    finished: false
+    finished: false,
+    score:[]
 };
 
 export default new Vuex.Store({
@@ -17,7 +18,8 @@ export default new Vuex.Store({
     state: {
         token: false,
         partie: null,
-        finished: false
+        finished: false,
+        score:[]
     },
     mutations: {
         setToken(state, token) {
@@ -38,11 +40,18 @@ export default new Vuex.Store({
         },
         setFinished(state, value) {
             state.finished = value
+        },
+        setScore(state, value){
+          state.score=value
+
         }
     },
     getters: {
         getPartie: (state) => {
             return state.partie
+        },
+        getScore:(state) =>{
+          return state.score
         }
     },
     actions: {
@@ -60,6 +69,10 @@ export default new Vuex.Store({
 
         finish({ commit }) {
             commit('setFinished', true)
+        },
+
+        editScore({commit}, value){
+          commit('setScore',value)
         }
 
     }

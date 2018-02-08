@@ -73,7 +73,6 @@ import Vue from 'vue'
 import Vue2Leaflet from 'vue2-leaflet'
 import {mapGetters} from 'vuex'
 
-
 delete L.Icon.Default.prototype._getIconUrl;
 
 L.Icon.Default.mergeOptions({
@@ -87,15 +86,19 @@ Vue.component('v-tilelayer', Vue2Leaflet.TileLayer);
 Vue.component('v-marker', Vue2Leaflet.Marker);
 
 export default {
+
 	name: 'JouerPartie',
 	data () {
 		return {
       interval: {},
       value: 100,
+      tempsInit : 100,
       currentIndex: 0,
       score: [],
       message: "",
-      dialog2 :false
+      dialog2 :false,
+      duree : [],
+      distance : []
 		}
 	},
   beforeDestroy () {
@@ -106,7 +109,10 @@ export default {
       if (this.value !== 0) {
         this.value -= 5
       }else{
+        this.duree.push(0)
+        console.log(this.duree)
         this.currentIndex ++
+
         if(this.currentIndex=== this.partie.serie.photos.length){
           this.$router.push('/finpartie')
         }
@@ -118,26 +124,39 @@ export default {
     // L.marker([48.6891776, 6.173155]).addTo(this.$refs.map.mapObject)
      this.$refs.map.mapObject.on('click', e => {
        selectedPosition = {lat: e.latlng.lat, lng: e.latlng.lng};
-       let d;
 
-       // Calcul de la distance entre le clic de l'utilisateur et le lieu de la photo
+
+
+       /* Calcul de la distance entre le clic de l'utilisateur et le lieu de la photo en mètre */
+       let d;
        this.partie.serie.photos.forEach((photo, index)=>{
           if(index == this.currentIndex){
             d = this.getDistance(selectedPosition, {lat: photo.lat, lng: photo.lng});
+            d = Math.round(d)
           }
        }, d)
 
-       console.log(d);
+
+       /* Calcul du temps restant en seconde */
+       let t = this.tempsInit - this.value
+       t = t / 5
+
+       console.log(t)
+
+       this.score.push({'id': this.currentIndex, 'temps' : t, 'distance' : d})
+       console.log('SCORE : ' + this.score)
 
 
-       this.score.push({id: this.currentIndex, distance: d});
+    //   this.score.push({id: this.currentIndex, distance: d});
        this.currentIndex ++;
 
        if(this.currentIndex == this.partie.serie.photos.length){
          this.$store.dispatch('finish').then(res => {
-          //  this.message="Bravo, vous avez répondu à toutes les questions"
-          //  this.dialog2=true
-              this.$router.push({name: 'fin'})
+        //  this.score.push({'distance': this.duree, 'temps' : this.distance});
+            this.setScore()
+            this.message="Bravo, vous avez répondu à toutes les questions"
+            this.dialog2=true
+        //  this.$router.push({name: 'fin'})
          })
        }
      })
@@ -161,8 +180,20 @@ export default {
     },
     chrono(){
       this.value=100;
-    }
+    },
+    precisionRound(number, precision) {
+    var factor = Math.pow(10, precision);
+    return Math.round(number * factor) / factor;
   },
+  setScore(){
+    this.$store.dispatch('editScore',this.score).then((response) => {
+
+    }).catch ((error) => {
+      console.log(error)
+    })
+  }
+  },
+
   computed: {
     ...mapGetters({partie: 'getPartie', finished: 'finished'})
   }
