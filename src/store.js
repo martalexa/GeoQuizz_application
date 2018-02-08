@@ -56,14 +56,11 @@ export default new Vuex.Store({
     },
     actions: {
         createPartie({ commit }, partie) {
-            api.post('parties', partie).then((res) => {
-                api.get('parties/' + res.data.id).then((res) => {
-                    commit('setPartie', res.data)
-                }).catch((err) => {
-
-                })
+            return api.post('parties', partie).then((res) => {
+                commit('setPartie', res.data)
+                return Promise.resolve(res)
             }).catch((err) => {
-
+              return Promise.reject(err)
             })
         },
 

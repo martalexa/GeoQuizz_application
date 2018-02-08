@@ -9,12 +9,12 @@
 
                   <v-card-title primary-title>
                     <div>
-                      <h3 class="headline mb-0">Place de {{serie.city.name}}</h3>
+                      <h3 class="headline mb-0">{{serie.name}} - {{serie.city.name}}</h3>
                     </div>
                   </v-card-title>
 
                   <v-card-media height="300px">
-                    <img src="../nancy.png" :alt="serie.city_name">
+                    <img :src="serie.image" :alt="serie.name">
                   </v-card-media>
 
                   <v-card-actions>
