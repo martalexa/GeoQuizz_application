@@ -105,7 +105,6 @@ export default {
     this.interval = setInterval(() => {
       if (this.value !== 0) {
         this.value -= 5
-
       }else{
         this.currentIndex ++
         if(this.currentIndex=== this.partie.serie.photos.length){
@@ -116,12 +115,24 @@ export default {
      }, 1000)
 
      let selectedPosition = null
-     L.marker([48.6843900, 6.1849600]).addTo(this.$refs.map.mapObject)
+    // L.marker([48.6891776, 6.173155]).addTo(this.$refs.map.mapObject)
      this.$refs.map.mapObject.on('click', e => {
        selectedPosition = {lat: e.latlng.lat, lng: e.latlng.lng};
-       let d = this.getDistance(selectedPosition, {lat: 48.6843900, lng: 6.1849600});
+       let d;
+
+       // Calcul de la distance entre le clic de l'utilisateur et le lieu de la photo
+       this.partie.serie.photos.forEach((photo, index)=>{
+          if(index == this.currentIndex){
+            d = this.getDistance(selectedPosition, {lat: photo.lat, lng: photo.lng});
+          }
+       }, d)
+
+       console.log(d);
+
+
        this.score.push({id: this.currentIndex, distance: d});
        this.currentIndex ++;
+
        if(this.currentIndex == this.partie.serie.photos.length){
          this.$store.dispatch('finish').then(res => {
           //  this.message="Bravo, vous avez répondu à toutes les questions"

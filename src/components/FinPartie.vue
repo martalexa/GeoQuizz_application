@@ -1,7 +1,7 @@
 <template>
   <v-container grid-list-md text-xs-center>
-    <h1>Vous avez fini votre partie !</h1></br>
-    <h2>Meilleurs scores</h2>
+    <h1>Vous avez fini votre partie : avec 1000 points !</h1></br>
+    <h2>Meilleurs scores :</h2>
     <v-layout row wrap>
       <v-flex xs12 sm12 md12 lg4 xl4>
         <h2>5 images</h2>
@@ -61,7 +61,7 @@
         </table>
       </v-flex>
     </v-layout>
-    <router-link to="/" flat color="dark grey" >Jouer une nouvelle partie</router-link>
+    <router-link to="/" flat color="dark grey"  class="btn">Jouer une nouvelle partie</router-link>
   </v-container>
 
 </template>
@@ -108,9 +108,6 @@ export default {
         console.log(error)
       })
   },
-  mounted(){
-
-  },
   methods:{
     getScore(){
       window.axios.get('parties')// plus id de la partie
@@ -127,5 +124,8 @@ export default {
 
 
 <style scoped>
-
+.btn {
+  margin-top : 50px;
+  padding :0 15px;
+}
 </style>
