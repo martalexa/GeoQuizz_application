@@ -18,7 +18,7 @@
                   </v-card-media>
 
                   <v-card-actions>
-                    <v-btn flat color="secondary" @click.stop="modal = true, serie_id = serie.id, serie_name = serie.city_name" id="serie">Jouer</v-btn>
+                    <v-btn flat color="secondary" @click.stop="modal = true, serie_id = serie.id, serie_name = serie.name" id="serie">Jouer</v-btn>
                   </v-card-actions>
 
                 </v-card>
@@ -50,6 +50,7 @@ export default {
 	name: 'CreationPartie',
 	data () {
 		return {
+            serie_name: '',
             series: [],
             serie_id: '',
             modal: false,
@@ -57,9 +58,9 @@ export default {
             nbImages: '',
             serie_name: '',
             choix: [
-                { text: '5' },
                 { text: '10' },
-                { text: '15' }
+                { text: '15' },
+                { text: '20' }
             ]
 		}
 	},
