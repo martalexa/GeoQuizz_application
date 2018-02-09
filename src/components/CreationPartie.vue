@@ -101,7 +101,7 @@ export default {
 			}).then((res) => {
                 this.$router.push({name: 'jouer'})
             }).catch((err) => {
-
+                console.log('Failure')
             })
         }
 	}

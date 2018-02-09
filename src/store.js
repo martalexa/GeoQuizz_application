@@ -42,7 +42,7 @@ export default new Vuex.Store({
             state.finished = value
         },
         setScore(state, value){
-          state.score=value
+          state.score = value
 
         }
     },
@@ -60,12 +60,22 @@ export default new Vuex.Store({
                 commit('setPartie', res.data)
                 return Promise.resolve(res)
             }).catch((err) => {
+                console.log('Error details')
+                console.log(err)
               return Promise.reject(err)
             })
         },
 
-        finish({ commit }) {
-            commit('setFinished', true)
+        finish({ commit, state}, new_score) {
+            // if(state.finished == false){
+            //     commit('setScore', new_score)
+            //     //commit('setFinished', true)
+            // }else{
+            //     return Promise.reject('La partie est déjà finie')
+            // }
+            commit('setScore', new_score)
+            return Promise.resolve('OK')
+            
         },
 
         editScore({commit}, value){
