@@ -1,7 +1,6 @@
 <template>
      <v-container grid-list-md text-xs-center>
         <v-layout row wrap>
-
           <v-flex xs12 sm12 md6 lg3 xl3 v-for="serie in series" :key="serie.id" class="containerPartie">
             <v-layout>
               <v-flex xs12>
@@ -24,7 +23,6 @@
               </v-flex>
             </v-layout>
           </v-flex>
-
         </v-layout>
         <v-dialog v-model="modal" max-width="500px">
             <v-card>
