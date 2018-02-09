@@ -5,18 +5,16 @@
 
         <v-flex md12 lg4>
           <div class="photographie">
-            <div v-if="currentIndex != partie.index">
-              <h2>Où se trouve cette photo sur la carte ?</h2>
-            </div>
-
-            <div>
-              <h2>{{message}}</h2>
-            </div>
-
             <div v-if="partie != undefined">
               <div v-for="(photo, index) in partie.serie.photos" :key="photo.id">
+
                   <div v-if="index == currentIndex" class="containerPhoto">
+                    <div>
+                      <div>
+                        <h2>Où se trouve cette photo sur la carte ?</h2>
+                      </div>
                       <img :src="photo.url" :alt="photo.description">
+                    </div>
                   </div>
               </div>
             </div>
@@ -36,31 +34,18 @@
           </div>
         </v-flex>
 
-
-
-        <v-flex md12 lg7 offset-lg1>
-
-          <div class="column container">
+        <v-flex lg7 offset-lg1 xs12>
+          <div class="column container" id="carte" @click="chrono">
             <div class="carte">
               <!-- Map -->
-              <v-map ref="map" :zoom="13" :center="[48.6843900, 6.1849600]">
-                  <v-tilelayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></v-tilelayer>
-                  <v-marker :lat-lng="[48.6843900, 6.1849600]"></v-marker>
-              </v-map>
+                <v-map ref="map" :zoom="12.5" :center="[48.6843900, 6.1677822]">
+                    <v-tilelayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></v-tilelayer>
+                </v-map>
               <!-- End Map -->
             </div>
           </div>
-
-          <div v-if="this.value === 0">
-            <v-btn flat class="suivant">Question suivante</v-btn>
-          </div>
-
-          <!-- Bouton fin de la partie : faire un v-if il a répondu à toutes les questions -->
-          <div>
-            <router-link to="/finpartie">fin de la partie</router-link>
-          </div>
-
         </v-flex>
+
       </v-layout>
     </v-container>
   </section>
@@ -72,7 +57,6 @@
 import Vue from 'vue'
 import Vue2Leaflet from 'vue2-leaflet'
 import {mapGetters} from 'vuex'
-
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -87,11 +71,13 @@ Vue.component('v-tilelayer', Vue2Leaflet.TileLayer);
 Vue.component('v-marker', Vue2Leaflet.Marker);
 
 export default {
+
 	name: 'JouerPartie',
 	data () {
 		return {
       interval: {},
       value: 100,
+      tempsInit:100,
       currentIndex: 0,
       score: [],
       message: ""
@@ -104,19 +90,46 @@ export default {
     this.interval = setInterval(() => {
       if (this.value !== 0) {
         this.value -= 5
+      }else{
+
+        this.score.push({'id': ++this.currentIndex, 'temps' : this.tempsInit, 'distance' : false})
+
+        if(this.currentIndex=== this.partie.serie.photos.length){
+          this.$router.push('/finpartie')
+        }
+          this.value =100
       }
      }, 1000)
 
      let selectedPosition = null
-     L.marker([50.5, 30.5]).addTo(this.$refs.map.mapObject);
+    // L.marker([48.6891776, 6.173155]).addTo(this.$refs.map.mapObject)
      this.$refs.map.mapObject.on('click', e => {
        selectedPosition = {lat: e.latlng.lat, lng: e.latlng.lng};
-       let d = this.getDistance(selectedPosition, {lat: 48.6843900, lng: 6.1849600});
-       this.score.push({id: this.currentIndex, distance: d});
-       this.currentIndex ++;
+
+
+
+       /* Calcul de la distance entre le clic de l'utilisateur et le lieu de la photo en mètre */
+       let d;
+       this.partie.serie.photos.forEach((photo, index)=>{
+          if(index == this.currentIndex){
+            d = this.getDistance(selectedPosition, {lat: photo.lat, lng: photo.lng});
+            d = Math.round(d)
+          }
+       }, d)
+
+       /* Calcul du temps restant en seconde */
+       let t = this.tempsInit - this.value
+       t = t / 5
+
+       /* push dans le tableau des scores */
+       this.score.push({'id': ++this.currentIndex, 'temps' : t++, 'distance' : d, score : '66'})
+
+
        if(this.currentIndex == this.partie.serie.photos.length){
-         this.message = "Bravo!";
-         this.$store.dispatch('finish').then(res => {
+         this.$store.dispatch('finish').then(res => {;
+            this.setScore()
+        //  this.message="Bravo, vous avez répondu à toutes les questions"
+        //  this.dialog2=true
             this.$router.push({name: 'fin'})
          })
        }
@@ -124,7 +137,7 @@ export default {
    },
 	methods:{
     getDistance(pos1, pos2) {
-      let R = 6371000; // Radius of the earth in km
+      let R = 6371000; // Radius of the earth in m
       let dLat = this.deg2rad(pos2.lat - pos1.lat);  // deg2rad below
       let dLon = this.deg2rad(pos2.lng - pos1.lng); 
       let a = 
@@ -133,13 +146,28 @@ export default {
         Math.sin(dLon/2) * Math.sin(dLon/2)
         ; 
       let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-      let d = R * c; // Distance in km
+      let d = R * c; // Distance in m
       return d;
     },
     deg2rad(deg){
       return deg * (Math.PI/180)
-    }
+    },
+    chrono(){
+      this.value=100;
+    },
+    precisionRound(number, precision) {
+    var factor = Math.pow(10, precision);
+    return Math.round(number * factor) / factor;
   },
+  setScore(){
+    this.$store.dispatch('editScore',this.score).then((response) => {
+
+    }).catch ((error) => {
+      console.log(error)
+    })
+  }
+  },
+
   computed: {
     ...mapGetters({partie: 'getPartie', finished: 'finished'})
   }
@@ -148,12 +176,12 @@ export default {
 
 
 <style scoped>
-  section{
-    margin : 20px;
-  }
+section{
+  margin : 20px;
+}
 .carte{
   border :1px solid black;
-  height:70vh;
+  height:75vh;
 }
 img{
     width : 100%;
@@ -167,5 +195,20 @@ img{
 .perdu{
   color:red;
 }
-
+.boutonScore{
+  text-decoration : none;
+  color:black;
+}
+.boutonScore:hover{
+  color:grey;
+}
+.findepartie{
+  z-index:10000;
+}
+#carte{
+  z-index:1;
+}
+.cache{
+  visibility: hidden;
+}
 </style>

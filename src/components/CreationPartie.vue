@@ -1,9 +1,29 @@
 <template>
      <v-container grid-list-md text-xs-center>
         <v-layout row wrap>
-            <v-flex xs12 sm12 md6 lg3 xl3 v-for="serie in series" :key="serie.id">
-                <v-btn color="primary" dark @click.stop="displayModal(serie)" >{{serie.city.name}}</v-btn>
-            </v-flex>
+          <v-flex xs12 sm12 md6 lg3 xl3 v-for="serie in series" :key="serie.id" class="containerPartie">
+            <v-layout>
+              <v-flex xs12>
+                <v-card>
+
+                  <v-card-title primary-title>
+                    <div>
+                      <h3 class="headline mb-0">{{serie.name}} - {{serie.city.name}}</h3>
+                    </div>
+                  </v-card-title>
+
+                  <v-card-media height="300px">
+                    <img :src="serie.image" :alt="serie.name">
+                  </v-card-media>
+
+                  <v-card-actions>
+                    <v-btn flat color="secondary" @click.stop="modal = true, serie_id = serie.id, serie_name = serie.name" id="serie">Jouer</v-btn>
+                  </v-card-actions>
+
+                </v-card>
+              </v-flex>
+            </v-layout>
+          </v-flex>
         </v-layout>
         <v-dialog v-model="modal" max-width="500px">
             <v-card>
@@ -28,6 +48,7 @@ export default {
 	name: 'CreationPartie',
 	data () {
 		return {
+            serie_name: '',
             series: [],
             serie_id: '',
             modal: false,
@@ -35,11 +56,10 @@ export default {
             nbImages: '',
             serie_name: '',
             choix: [
-                { text: '5' },
                 { text: '10' },
-                { text: '15' }
-            ],
-            selected_serie: null
+                { text: '15' },
+                { text: '20' }
+            ]
 		}
 	},
     created(){
@@ -72,7 +92,7 @@ export default {
 			// }).catch ((error) => {
 			// 	console.log(error)
             // })
-            
+
             this.$store.dispatch('createPartie', {
                 player_username : this.pseudo,
                 serie_id: this.serie_id,
@@ -83,10 +103,6 @@ export default {
 
             })
         },
-        displayModal(serie) {
-            this.selected_serie = serie
-            this.modal = true
-        }
 	}
 }
 </script>
@@ -98,5 +114,8 @@ export default {
     }
     .vue2leaflet-map{
       position:relative;
+    }
+    .containerPartie{
+    margin-left : 50px;
     }
 </style>
