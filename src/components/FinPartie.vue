@@ -1,6 +1,6 @@
 <template>
   <v-container grid-list-md text-xs-center>
-    <h1>Vous avez fini votre partie : avec 1000 points !</h1></br>
+    <h1>Vous avez fini votre partie : avec {{score.final_score}} points !</h1></br>
 
     <v-expansion-panel focusable>
     <v-expansion-panel-content>
@@ -21,12 +21,18 @@
                   <th>Points</th>
                 </tr>
               </thead>
-              <tbody v-for="leScore in scoreFinal">
+              <tbody>
+                <tr v-for="(s, index) in score.rows_result">
+                  <td>{{index + 1}}</td>
+                  <td>{{s.distance}}</td>
+                  <td>{{s.nb_seconds}}</td>
+                  <td>{{s.score}}</td>
+                </tr>
                 <tr>
-                  <td>{{leScore.id}}</td>
-                  <td>{{leScore.distance}}</td>
-                  <td>{{leScore.temps}}</td>
-                  <td>{{leScore.score}}</td>
+                  <td></td>
+                  <td></td>
+                  <td>Score total</td>
+                  <td>{{score.final_score}}</td>
                 </tr>
               </tbody>
             </table>
@@ -174,7 +180,7 @@ export default {
 
 
 
-    ...mapGetters({scoreFinal: 'getScore'})
+    ...mapGetters({score: 'getScore'})
   }
 }
 </script>

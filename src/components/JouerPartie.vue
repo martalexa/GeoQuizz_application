@@ -20,16 +20,19 @@
             </div>
 
             <div>
-              <v-progress-circular
+              <v-progress-circular v-if="partie != undefined"
               v-bind:size="100"
               v-bind:width="15"
               v-bind:rotate="180"
               v-bind:value="value"
               color="green"
               >
-              <div v-if="this.value===0" class="perdu">perdu</div>
-              <div v-else>{{value}}</div>
+              <div v-if="value===0 && !answered" class="perdu">perdu</div>
+              <div v-else>{{value / 5}}</div>
             </v-progress-circular>
+          </div>
+          <div v-if="answered">
+            <v-btn color="primary" @click="nextPhoto()">Suivant</v-btn>
           </div>
         </div>
       </v-flex>
@@ -39,38 +42,24 @@
         <div class="column container" id="carte" @click="chrono">
           <div class="carte">
             <!-- Map -->
-            <v-map ref="map" :minZoom ="partie.serie.city.zoom_level" :maxZoom ="partie.serie.city.zoom_level" :zoom="partie.serie.city.zoom_level" :center="[ partie.serie.city.lat, partie.serie.city.lng]">
+            <v-map ref="map" :zoom="partie.serie.city.zoom_level" :center="[ partie.serie.city.lat, partie.serie.city.lng]">
               <v-tilelayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></v-tilelayer>
             </v-map>
             <!-- End Map -->
           </div>
         </div>
       </v-flex>
+      <div v-if="partie != undefined">
+        <p>Paliers</p>
+        <p v-for="palier in partie.serie.rules.paliers">{{palier.coef}}</p>
+      </div>
+      <div v-if="partie != undefined">
+        <p>Times</p>
+        <p v-for="time in partie.serie.rules.times">{{time.nb_seconds}}</p>
+      </div>
 
     </v-layout>
   </v-container>
-  <v-dialog id="dialog" v-model="result" persistent="true" max-width="500px">
-    <v-card>
-      <v-card-title>
-        <h2>Résultat</h2>
-      </v-card-title>
-      <p>Distance : {{this.d}} m</p>
-      <p> Temps : {{this.t}} s</p>
-<v-btn @click="nextPhoto()">Photo Suivante</v-btn>
-    </v-card>
-  </v-dialog>
-  <div class="findepartie">
-    <v-dialog v-model="dialog2" max-width="500px">
-      <v-card>
-        <v-card-title>
-          <h2>{{message}}</h2>
-        </v-card-title>
-        <v-card-text>
-         <router-link to="/finpartie" class="boutonScore">VOIR MON SCORE</router-link>
-       </v-card-text>
-     </v-card>
-   </v-dialog>
- </div>
 </section>
 
 </template>
@@ -80,6 +69,7 @@
 import Vue from 'vue'
 import Vue2Leaflet from 'vue2-leaflet'
 import {mapGetters} from 'vuex'
+import store from '@/store'
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -95,76 +85,126 @@ Vue.component('v-marker', Vue2Leaflet.Marker);
 
 export default {
 
-	name: 'JouerPartie',
-	data () {
-		return {
+  name: 'JouerPartie',
+  data () {
+    return {
       interval: {},
       value: 100,
-      tempsInit:100,
       currentIndex: 0,
-      score: [],
-      message: "",
-      dialog2 :false,
-      result :false,
+      sorted_rules: null,
       d : "",
       t : "",
-      markers :""
+      markers : null,
+      answered: false,
+      global_score: {
+        rows_result: [],
+        final_score: 0
+      },
+      working: false
     }
   },
   beforeDestroy () {
    clearInterval(this.interval)
- },
- mounted () {
-  
-  this.interval = setInterval(() => {
-    if (this.value !== 0) {
-      this.value -= 5
-    }else{
-
-      this.score.push({'id': ++this.currentIndex, 'temps' : this.tempsInit, 'distance' : false})
-
-      if(this.currentIndex=== this.partie.serie.photos.length){
-        this.$router.push('/finpartie')
-      }
-      this.value =100
+  },
+  beforeRouteEnter(to, from, next) {
+    if(store.getters.isFinished == true || store.getters.getPartie == null){
+      next({name: 'create_partie'})
     }
-  }, 1000)
+    next()
+  },
+  mounted () {
+      
+      //Initialisation de l'interval pour décrementer la valeur dans le compte à rebours
+      this.interval = setInterval(() => {
+        if (this.value !== 0) {
+          this.value -= 5
+        }else{
+          if(this.answered == false) {
+            this.global_score.rows_result.push({
+                nb_seconds: false,
+                distance: false,
+                score: 0
+            })
+          }
 
-  let playerMarker,responseMarker
-  let selectedPosition = null
-    // L.marker([48.6891776, 6.173155]).addTo(this.$refs.map.mapObject)
-    this.$refs.map.mapObject.on('click', e => {
-     selectedPosition = {lat: e.latlng.lat, lng: e.latlng.lng};
-     playerMarker = L.marker([e.latlng.lat, e.latlng.lng])
+          this.answered = false
 
+          if(this.markers != null) {
+            this.markers.clearLayers()
+          }
 
-     /* Calcul de la distance entre le clic de l'utilisateur et le lieu de la photo en mètre */
-     let d;
-     this.partie.serie.photos.forEach((photo, index)=>{
-      if(index == this.currentIndex){
-        d = this.getDistance(selectedPosition, {lat: photo.lat, lng: photo.lng})
-        d = Math.round(d)
-        responseMarker= L.marker([photo.lat, photo.lng])
-      }
-    }, d)
-     this.d = d
-     let markers =L.layerGroup([responseMarker, playerMarker]).addTo(this.$refs.map.mapObject)
-     this.markers = markers
-     this.result = true
-     /* Calcul du temps restant en seconde */
-     let t = this.tempsInit - this.value
-     this.t = t / 5
-     this.t = this.t++
-   
-     
-     /* push dans le tableau des scores */
-     // this.nextPhoto(this.currentIndex,this.t,this.d,this.score)
+          if(this.currentIndex === this.partie.serie.photos.length){
+            this.finishGame()
+          }
 
+          this.value = this.maxNbSeconds()
+        }
+      }, 1000)
 
 
+      //Récupération de la position choisie par le joueur lors du clique sur la carte
 
+      let selectedPosition = null
 
-   })
+      this.$refs.map.mapObject.on('click', e => {
+
+          if(this.answered == true){
+            return false
+          }
+
+          this.answered = true
+
+          if(this.markers != null){
+            this.markers.clearLayers()
+          }
+          if(this.sorted_rules == null) {
+            this.sorted_rules = this.sortRules()
+          }
+          selectedPosition = {lat: e.latlng.lat, lng: e.latlng.lng};
+
+          /* Calcul de la distance entre le clic de l'utilisateur et le lieu de la photo en mètre */
+          let d = null
+          let selectedMarker = null
+          this.partie.serie.photos.forEach((photo, index)=>{
+              if(index == this.currentIndex){
+                selectedMarker = L.marker([photo.lat, photo.lng])
+                d = this.getDistance(selectedPosition, {lat: photo.lat, lng: photo.lng})
+                d = Math.round(d)
+              }
+          }, d)
+
+         this.markers = L.layerGroup([selectedMarker, L.marker([e.latlng.lat, e.latlng.lng])]).addTo(this.$refs.map.mapObject)
+
+         /* Calcul du temps restant en seconde */
+         let t = (this.maxNbSeconds()) - this.value
+         t = t / 5
+         t = parseInt(t)
+
+         let row_result = {
+            nb_seconds: t,
+            distance: d,
+            score: 0
+         }
+
+         //Calcul du score initial obtenu par rapport à la distance
+         for(let palier of this.sorted_rules.paliers){
+           if(row_result.distance <= (palier.coef * this.partie.serie.distance)){
+            row_result.score = palier.points
+            break
+           }
+         }
+         //Multiplication du score initial par rapport aux seconds
+         for(let time of this.sorted_rules.times){
+           if(row_result.nb_seconds <= (time.nb_seconds)){
+
+            row_result.score = row_result.score * time.coef
+            break
+           }
+         }
+         this.global_score.rows_result.push(row_result)
+         this.global_score.final_score += row_result.score
+
+      })
   },
   methods:{
     getDistance(pos1, pos2) {
@@ -183,51 +223,97 @@ export default {
       return deg * (Math.PI/180)
     },
     chrono(){
-      this.value=100;
+
     },
     precisionRound(number, precision) {
       var factor = Math.pow(10, precision);
       return Math.round(number * factor) / factor;
     },
     setScore(){
-      this.$store.dispatch('editScore',this.score).then((response) => {
+      // this.$store.dispatch('editScore',this.score).then((response) => {
 
-      }).catch ((error) => {
-        console.log(error)
+      // }).catch ((error) => {
+      //   console.log(error)
+      // })
+    },
+    finishGame() {
+      if(this.working){
+        return
+      }
+      this.working = true
+      this.$store.dispatch('sendScore', this.global_score).then(res => {
+         this.$router.push({name: 'fin'})
+      }).catch(e => {
+
       })
     },
     nextPhoto(){
-      
-      this.markers.clearLayers()
 
       if(this.currentIndex+1 == this.partie.serie.photos.length){
-
-      console.log('Finished: success')
-         this.score.push({'id': this.currentIndex+1, 'temps' : this.t, 'distance' : this.d})
-
-      this.$store.dispatch('finish', this.score).then(res => {
-        //this.setScore()
-        this.$router.push('/finpartie')
-      }).catch(e => {
-  
-        console.log(e)
-      })
+          this.finishGame()
+      }
+      else {
+          this.currentIndex+=1
+          this.markers.clearLayers()
+          this.answered = false
+          this.value = this.maxNbSeconds()
      }
-     else {
-
-      
-       this.currentIndex+=1
-          this.score.push({'id': this.currentIndex, 'temps' : this.t, 'distance' : this.d})
-     }
-     this.value= 100
-     this.result = false
    
- }
+ },
+
+  maxNbSeconds() {
+      if(this.partie != undefined){
+        let sorted = this.partie.serie.rules.times
+        sorted = sorted.sort((a, b) => {
+          if(a.nb_seconds < b.nb_seconds){
+            return 1
+          }
+          return -1
+        })
+        return sorted[0].nb_seconds * 5
+      }else{
+        console.log('Pass to 100')
+        this.value = 100
+        return 100
+      }
+  },
+
+  sortRules() {
+        let sorted_rules = {
+          paliers: [],
+          times: []
+        }
+
+        for(let time of this.partie.serie.rules.times){
+          sorted_rules.times.push({
+            nb_seconds: time.nb_seconds,
+            coef: time.coef
+          })
+        }
+
+        for(let palier of this.partie.serie.rules.paliers){
+          sorted_rules.paliers.push({
+            coef: palier.coef,
+            points: palier.points
+          })
+        }
+        sorted_rules.times.sort((a, b) => {
+          return a.nb_seconds - b.nb_seconds
+        })
+        sorted_rules.paliers.sort((a, b) => {
+          return a.coef - b.coef
+        })
+        return sorted_rules
+  }
+
 },
 
- computed: {
-  ...mapGetters({partie: 'getPartie', finished: 'finished'})
-}
+   computed: {
+    ...mapGetters({partie: 'getPartie', finished: 'finished'})
+  },
+   created() {
+      this.value = this.maxNbSeconds()
+   }
 }
 </script>
 
