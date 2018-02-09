@@ -1,12 +1,10 @@
 <template>
      <v-container grid-list-md text-xs-center>
         <v-layout row wrap>
-
           <v-flex xs12 sm12 md6 lg3 xl3 v-for="serie in series" :key="serie.id" class="containerPartie">
             <v-layout>
               <v-flex xs12>
                 <v-card>
-
                   <v-card-title primary-title>
                     <div>
                       <h3 class="headline mb-0">{{serie.name}} - {{serie.city.name}}</h3>
@@ -18,24 +16,24 @@
                   </v-card-media>
 
                   <v-card-actions>
-                    <v-btn flat color="secondary" @click.stop="modal = true, serie_id = serie.id, serie_name = serie.name" id="serie">Jouer</v-btn>
+                    <v-btn flat color="secondary" @click.stop="modal = true, serie_id = serie.id, serie_name = serie.name, getCount()" id="serie">Jouer</v-btn>
                   </v-card-actions>
 
                 </v-card>
               </v-flex>
             </v-layout>
           </v-flex>
-
         </v-layout>
         <v-dialog v-model="modal" max-width="500px">
             <v-card>
                 <v-card-title>
                     <h2>{{serie_name}}</h2>
+                    <p>{{erreur}}</p>
                 </v-card-title>
                 <v-card-text>
                     <form>
                         <v-text-field label="Pseudo" v-model="pseudo" required></v-text-field>
-                        <v-select :items="choix" label="Nombre de photos" item-value="text" v-model="nbImages"></v-select>
+                        <v-select :items="choix" label="Nombre de photos" item-value="text" v-model="nbImages" required></v-select>
                         <v-btn @click="submit">submit</v-btn>
                         <v-btn @click="clear">clear</v-btn>
                     </form>
@@ -46,29 +44,23 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
 	name: 'CreationPartie',
 	data () {
 		return {
             serie_name: '',
             series: [],
-            serie_id: '',
+            serie_id: null,
             modal: false,
             pseudo: '',
-            nbImages: '',
-            serie_name: '',
-            choix: [
-                { text: '10' },
-                { text: '15' },
-                { text: '20' }
-            ]
+            nbImages: null,
+            choix: [],
+            erreur: ''
 		}
 	},
     created(){
-        // let router = this.$router;
-        // setTimeout(function() {
-        //     router.push({'name': 'jouer'})
-        // }, 5000);
+        
     },
 	mounted (){
         window.axios.get('series')
@@ -76,9 +68,41 @@ export default {
                 this.series = response.data
 			}).catch ((error) => {
 				console.log(error)
-			})
+            })
 	},
 	methods:{
+        getCount(){
+            this.$store.dispatch('count', this.serie_id)
+                .then(res=>{
+                    this.choix = []
+                    Number.prototype.mod = function(n) {
+                        var m = (( this % n) + n) % n;
+                        return m < 0 ? m + Math.abs(n) : m;
+                    };
+                    if(parseInt(res.data).mod(2)===0){
+                        for(let i = 10;i<res.data;i=i+5){
+                            this.choix.push({'text':i})
+                        }
+                    }else{
+                        for(let i = 10;i<res.data;i=i+5){
+                            this.choix.push({'text':i})
+                        }
+                        this.choix.push({'text':res.data})
+                    }
+                })
+                .catch(e=>{
+                    console.log(e)
+                })
+        },
+        countImage(){
+            for(let i = 0;i<this.count;i+2){
+                if(i<this.count){
+                    this.choix.push({'text':i})
+                }else{
+                    this.choix.push({'text':54})
+                }
+            }
+        },
         clear () {
             this.pseudo = ''
             this.nbImages = ''
@@ -94,18 +118,25 @@ export default {
 			// }).catch ((error) => {
 			// 	console.log(error)
             // })
-
-            this.$store.dispatch('createPartie', {
-                player_username : this.pseudo,
-                serie_id: this.serie_id,
-                nb_photos: this.nbImages
-			}).then((res) => {
-                this.$router.push({name: 'jouer'})
-            }).catch((err) => {
-
-            })
+            if(this.serie_id !== null && this.nbImages !== null && this.pseudo !== ''){
+                this.$store.dispatch('createPartie', {
+                    player_username : this.pseudo,
+                    serie_id: this.serie_id,
+                    nb_photos: this.nbImages
+                }).then((res) => {
+                    this.$router.push({name: 'jouer'})
+                }).catch((err) => {
+                    console.log('Fail to create the partie')
+                })
+            }else{
+                this.erreur = 'Remplissez tous les champs !!'
+            }
+            
         }
-	}
+    },
+    computed:{
+        ...mapGetters({count: 'getCount'})
+    }
 }
 </script>
 

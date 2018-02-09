@@ -4,13 +4,15 @@ import api from '@/api'
 import ls from '@/services/ls'
 import persistedstate from 'vuex-persistedstate'
 
+
 Vue.use(Vuex);
 
 const initialState = {
     token: false,
     partie: null,
     finished: false,
-    score:[]
+    score: [],
+    count: null
 };
 
 export default new Vuex.Store({
@@ -19,7 +21,8 @@ export default new Vuex.Store({
         token: false,
         partie: null,
         finished: false,
-        score:[]
+        score: [],
+        count: null
     },
     mutations: {
         setToken(state, token) {
@@ -41,17 +44,23 @@ export default new Vuex.Store({
         setFinished(state, value) {
             state.finished = value
         },
-        setScore(state, value){
-          state.score=value
 
+        setScore(state, value){
+          state.score = value
+        },
+        setCount(state, c) {
+            state.count = c
         }
     },
     getters: {
         getPartie: (state) => {
             return state.partie
         },
-        getScore:(state) =>{
-          return state.score
+        getScore: (state) => {
+            return state.score
+        },
+        getCount: (state) => {
+            return state.count
         }
     },
     actions: {
@@ -60,17 +69,33 @@ export default new Vuex.Store({
                 commit('setPartie', res.data)
                 return Promise.resolve(res)
             }).catch((err) => {
-              return Promise.reject(err)
+                return Promise.reject(err)
+
             })
         },
 
-        finish({ commit }) {
-            commit('setFinished', true)
+        finish({ commit, state}, new_score) {
+            // if(state.finished == false){
+            //     commit('setScore', new_score)
+            //     //commit('setFinished', true)
+            // }else{
+            //     return Promise.reject('La partie est déjà finie')
+            // }
+            commit('setScore', new_score)
+            return Promise.resolve('OK')
+            
         },
 
-        editScore({commit}, value){
-          commit('setScore',value)
+        editScore({ commit }, value) {
+            commit('setScore', value)
+        },
+        count({ commit }, serieId) {
+            return api.get('series/' + serieId + '/count').then(res => {
+                commit('setCount', res.data)
+                return Promise.resolve(res)
+            }).catch((err) => {
+                return Promise.reject(err)
+            })
         }
-
     }
 })

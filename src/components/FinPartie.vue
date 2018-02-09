@@ -3,7 +3,7 @@
     <h1>Vous avez fini votre partie : avec 1000 points !</h1></br>
 
     <v-expansion-panel focusable>
-    <v-expansion-panel-content id="ouvert" v-bind:value="id === ouvert">
+    <v-expansion-panel-content>
 
       <div slot="header"><h2>Détails du score</h2></div>
       <v-card>
