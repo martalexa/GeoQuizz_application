@@ -18,7 +18,7 @@
                   </v-card-media>
 
                   <v-card-actions>
-                    <v-btn flat color="secondary" @click.stop="modal = true, serie_id = serie.id, serie_name = serie.name" id="serie">Jouer</v-btn>
+                    <v-btn flat color="secondary" @click.stop="modal = true, serie_id = serie.id, serie_name = serie.name, getCount()" id="serie">Jouer</v-btn>
                   </v-card-actions>
 
                 </v-card>
@@ -46,6 +46,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
 	name: 'CreationPartie',
 	data () {
@@ -57,18 +58,11 @@ export default {
             pseudo: '',
             nbImages: '',
             serie_name: '',
-            choix: [
-                { text: '10' },
-                { text: '15' },
-                { text: '20' }
-            ]
+            choix: []
 		}
 	},
     created(){
-        // let router = this.$router;
-        // setTimeout(function() {
-        //     router.push({'name': 'jouer'})
-        // }, 5000);
+        
     },
 	mounted (){
         window.axios.get('series')
@@ -76,9 +70,41 @@ export default {
                 this.series = response.data
 			}).catch ((error) => {
 				console.log(error)
-			})
+            })
 	},
 	methods:{
+        getCount(){
+            this.$store.dispatch('count', this.serie_id)
+                .then(res=>{
+                    this.choix = []
+                    Number.prototype.mod = function(n) {
+                        var m = (( this % n) + n) % n;
+                        return m < 0 ? m + Math.abs(n) : m;
+                    };
+                    if(parseInt(res.data).mod(2)===0){
+                        for(let i = 10;i<res.data;i=i+5){
+                            this.choix.push({'text':i})
+                        }
+                    }else{
+                        for(let i = 10;i<res.data;i=i+5){
+                            this.choix.push({'text':i})
+                        }
+                        this.choix.push({'text':res.data})
+                    }
+                })
+                .catch(e=>{
+                    console.log(e)
+                })
+        },
+        countImage(){
+            for(let i = 0;i<this.count;i+2){
+                if(i<this.count){
+                    this.choix.push({'text':i})
+                }else{
+                    this.choix.push({'text':54})
+                }
+            }
+        },
         clear () {
             this.pseudo = ''
             this.nbImages = ''
@@ -105,7 +131,10 @@ export default {
 
             })
         }
-	}
+    },
+    computed:{
+        ...mapGetters({count: 'getCount'})
+    }
 }
 </script>
 
