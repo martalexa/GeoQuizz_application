@@ -5,7 +5,6 @@
             <v-layout>
               <v-flex xs12>
                 <v-card>
-
                   <v-card-title primary-title>
                     <div>
                       <h3 class="headline mb-0">{{serie.name}} - {{serie.city.name}}</h3>
@@ -28,12 +27,13 @@
         <v-dialog v-model="modal" max-width="500px">
             <v-card>
                 <v-card-title>
-                    <h2>{{selected_serie != null?selected_serie.name:''}}</h2>
+                    <h2>{{serie_name}}</h2>
+                    <p>{{erreur}}</p>
                 </v-card-title>
                 <v-card-text>
                     <form>
                         <v-text-field label="Pseudo" v-model="pseudo" required></v-text-field>
-                        <v-select :items="choix" label="Nombre de photos" item-value="text" v-model="nbImages"></v-select>
+                        <v-select :items="choix" label="Nombre de photos" item-value="text" v-model="nbImages" required></v-select>
                         <v-btn @click="submit">submit</v-btn>
                         <v-btn @click="clear">clear</v-btn>
                     </form>
@@ -51,12 +51,12 @@ export default {
 		return {
             serie_name: '',
             series: [],
-            serie_id: '',
+            serie_id: null,
             modal: false,
             pseudo: '',
-            nbImages: '',
-            serie_name: '',
-            choix: []
+            nbImages: null,
+            choix: [],
+            erreur: ''
 		}
 	},
     created(){
@@ -118,16 +118,20 @@ export default {
 			// }).catch ((error) => {
 			// 	console.log(error)
             // })
-
-            this.$store.dispatch('createPartie', {
-                player_username : this.pseudo,
-                serie_id: this.serie_id,
-                nb_photos: this.nbImages
-			}).then((res) => {
-                this.$router.push({name: 'jouer'})
-            }).catch((err) => {
-
-            })
+            if(this.serie_id !== null && this.nbImages !== null && this.pseudo !== ''){
+                this.$store.dispatch('createPartie', {
+                    player_username : this.pseudo,
+                    serie_id: this.serie_id,
+                    nb_photos: this.nbImages
+                }).then((res) => {
+                    this.$router.push({name: 'jouer'})
+                }).catch((err) => {
+                    console.log('Fail to create the partie')
+                })
+            }else{
+                this.erreur = 'Remplissez tous les champs !!'
+            }
+            
         }
     },
     computed:{
