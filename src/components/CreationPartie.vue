@@ -128,7 +128,7 @@ export default {
                 }).then((res) => {
                     this.$router.push({name: 'jouer'})
                 }).catch((err) => {
-
+                    console.log('Fail to create the partie')
                 })
             }else{
                 this.erreur = 'Remplissez tous les champs !!'

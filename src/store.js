@@ -4,6 +4,7 @@ import api from '@/api'
 import ls from '@/services/ls'
 import persistedstate from 'vuex-persistedstate'
 
+
 Vue.use(Vuex);
 
 const initialState = {
@@ -43,9 +44,9 @@ export default new Vuex.Store({
         setFinished(state, value) {
             state.finished = value
         },
-        setScore(state, value) {
-            state.score = value
 
+        setScore(state, value){
+          state.score = value
         },
         setCount(state, c) {
             state.count = c
@@ -69,11 +70,20 @@ export default new Vuex.Store({
                 return Promise.resolve(res)
             }).catch((err) => {
                 return Promise.reject(err)
+
             })
         },
 
-        finish({ commit }) {
-            commit('setFinished', true)
+        finish({ commit, state}, new_score) {
+            // if(state.finished == false){
+            //     commit('setScore', new_score)
+            //     //commit('setFinished', true)
+            // }else{
+            //     return Promise.reject('La partie est déjà finie')
+            // }
+            commit('setScore', new_score)
+            return Promise.resolve('OK')
+            
         },
 
         editScore({ commit }, value) {
