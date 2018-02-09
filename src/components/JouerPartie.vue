@@ -28,7 +28,7 @@
                 color="green"
                 >
                 <div v-if="this.value===0" class="perdu">perdu</div>
-                <div v-else>{{value}}</div>
+                <div v-else>{{value}} %</div>
             </v-progress-circular>
             </div>
           </div>
