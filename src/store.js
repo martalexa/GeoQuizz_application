@@ -4,6 +4,7 @@ import api from '@/api'
 import ls from '@/services/ls'
 import persistedstate from 'vuex-persistedstate'
 
+
 Vue.use(Vuex);
 
 const initialState = {

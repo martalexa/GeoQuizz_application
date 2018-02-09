@@ -7,7 +7,7 @@ import store from './store.js'
 import axios from 'axios'
 import Vue2Leaflet from 'vue2-leaflet'
 import Vuetify from 'vuetify'
-import ('../node_modules/vuetify/dist/vuetify.min.css')
+import ('../node_modules/vuetify/dist/vuetify.min.css')	
 import colors from 'vuetify/es5/util/colors'
 
 Vue.use(Vuetify)

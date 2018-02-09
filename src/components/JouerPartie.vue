@@ -40,7 +40,7 @@
         <div class="column container" id="carte" @click="chrono">
           <div class="carte">
             <!-- Map -->
-            <v-map ref="map" :zoom="partie.serie.city.zoom_level" :center="[ partie.serie.city.lat, partie.serie.city.lng]">
+            <v-map ref="map" :minZoom ="partie.serie.city.zoom_level" :maxZoom ="partie.serie.city.zoom_level" :zoom="partie.serie.city.zoom_level" :center="[ partie.serie.city.lat, partie.serie.city.lng]">
               <v-tilelayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></v-tilelayer>
             </v-map>
             <!-- End Map -->
@@ -50,13 +50,14 @@
 
     </v-layout>
   </v-container>
-  <v-dialog id="dialog" v-model="result" max-width="500px">
+  <v-dialog id="dialog" v-model="result" persistent="true" max-width="500px">
     <v-card>
       <v-card-title>
-        <h2>Ma discussion</h2>
-        <v-btn @click="nextPhoto()">Photo Suivante</v-btn>
+        <h2>Résultat</h2>
       </v-card-title>
-
+      <p>Distance : {{this.d}} m</p>
+      <p> Temps : {{this.t}} s</p>
+<v-btn @click="nextPhoto()">Photo Suivante</v-btn>
     </v-card>
   </v-dialog>
   <div class="findepartie">
@@ -115,6 +116,7 @@ export default {
    clearInterval(this.interval)
  },
  mounted () {
+  
   this.interval = setInterval(() => {
     if (this.value !== 0) {
       this.value -= 5
@@ -128,6 +130,7 @@ export default {
       this.value =100
     }
   }, 1000)
+
   let playerMarker,responseMarker
   let selectedPosition = null
     // L.marker([48.6891776, 6.173155]).addTo(this.$refs.map.mapObject)
@@ -152,12 +155,13 @@ export default {
      /* Calcul du temps restant en seconde */
      let t = this.tempsInit - this.value
      this.t = t / 5
+     this.t = this.t++
    
      
      /* push dans le tableau des scores */
      // this.nextPhoto(this.currentIndex,this.t,this.d,this.score)
 
-     
+
 
 
 
@@ -201,21 +205,25 @@ export default {
       if(this.currentIndex+1 == this.partie.serie.photos.length){
 
       console.log('Finished: success')
+         this.score.push({'id': this.currentIndex+1, 'temps' : this.t, 'distance' : this.d})
 
       this.$store.dispatch('finish', this.score).then(res => {
         //this.setScore()
         this.$router.push('/finpartie')
       }).catch(e => {
-        console.log('Failed with err')
+  
         console.log(e)
       })
      }
      else {
-      console.log('Finished: failure')
-       this.score.push({'id': this.currentIndex+1, 'temps' : this.t++, 'distance' : this.d})
+
+      
        this.currentIndex+=1
+          this.score.push({'id': this.currentIndex, 'temps' : this.t, 'distance' : this.d})
      }
+     this.value= 100
      this.result = false
+   
  }
 },
 
