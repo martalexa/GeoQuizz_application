@@ -3,7 +3,7 @@
     <v-container grid-list-md text-xs-center>
       <v-layout row wrap>
 
-        <v-flex lg4 xs12>
+        <v-flex md12 lg4>
           <div class="photographie">
             <div v-if="partie != undefined">
               <div v-for="(photo, index) in partie.serie.photos" :key="photo.id">
@@ -33,7 +33,6 @@
           </div>
         </div>
       </v-flex>
-
 
 
       <v-flex lg7 offset-lg1 xs12>
@@ -176,7 +175,6 @@ export default {
       Math.sin(dLat/2) * Math.sin(dLat/2) +
       Math.cos(this.deg2rad(pos1.lat)) * Math.cos(this.deg2rad(pos2.lat)) *
       Math.sin(dLon/2) * Math.sin(dLon/2)
-      ;
       let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
       let d = R * c; // Distance in m
       return d;
