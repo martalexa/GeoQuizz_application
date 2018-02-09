@@ -9,7 +9,7 @@ Vue.use(Vuex);
 
 const initialState = {
     token: false,
-    partie: null,
+    partie: [],
     finished: false,
     score: [],
     count: null
@@ -31,8 +31,6 @@ export default new Vuex.Store({
         },
         setPartie(state, p) {
             state.partie = p
-            console.log('New game session')
-            console.log(state.partie)
         },
         initialiseStore(state) {
             if (localStorage.getItem('store')) {
@@ -45,8 +43,8 @@ export default new Vuex.Store({
             state.finished = value
         },
 
-        setScore(state, value){
-          state.score = value
+        setScore(state, value) {
+            state.score = value
         },
         setCount(state, c) {
             state.count = c
@@ -70,11 +68,16 @@ export default new Vuex.Store({
                 return Promise.resolve(res)
             }).catch((err) => {
                 return Promise.reject(err)
-
             })
         },
-
-        finish({ commit, state}, new_score) {
+        allParties({ commit }) {
+            return api.get('parties/').then(res => {
+                return Promise.resolve(res)
+            }).catch(e => {
+                return Promise.reject(err)
+            })
+        },
+        finish({ commit, state }, new_score) {
             // if(state.finished == false){
             //     commit('setScore', new_score)
             //     //commit('setFinished', true)
@@ -83,7 +86,7 @@ export default new Vuex.Store({
             // }
             commit('setScore', new_score)
             return Promise.resolve('OK')
-            
+
         },
 
         editScore({ commit }, value) {

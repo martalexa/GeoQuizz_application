@@ -50,7 +50,7 @@
 
     </v-layout>
   </v-container>
-  <v-dialog id="dialog" v-model="result" persistent="true" max-width="500px">
+  <v-dialog id="dialog" v-model="result" persistent max-width="500px">
     <v-card>
       <v-card-title>
         <h2>Résultat</h2>
@@ -121,8 +121,9 @@ export default {
     if (this.value !== 0) {
       this.value -= 5
     }else{
+      let tt = 'Timeout'
 
-      this.score.push({'id': ++this.currentIndex, 'temps' : this.tempsInit, 'distance' : false})
+      this.score.push({'id': ++this.currentIndex, 'temps' : tt, 'distance' : false})
 
       if(this.currentIndex=== this.partie.serie.photos.length){
         this.$router.push('/finpartie')
