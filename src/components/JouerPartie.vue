@@ -91,7 +91,8 @@ export default {
         rows_result: [],
         final_score: 0
       },
-      working: false
+      working: false,
+      latLngObjects: []
     }
   },
   beforeDestroy () {
@@ -112,8 +113,8 @@ export default {
         }else{
           if(this.answered == false) {
             this.global_score.rows_result.push({
-                nb_seconds: false,
-                distance: false,
+                nb_seconds: "Pas de réponse",
+                distance: "Pas de réponse",
                 score: 0
             })
           }
@@ -124,11 +125,13 @@ export default {
             this.markers.clearLayers()
           }
 
-          if(this.currentIndex === this.partie.serie.photos.length){
+          if(this.currentIndex + 1 === this.partie.serie.photos.length){
             this.finishGame()
+          }else{
+            this.currentIndex ++
+            this.$refs.map.fitBounds(this.latLngObjects)
+            this.value = this.maxNbSeconds()
           }
-
-          this.value = this.maxNbSeconds()
         }
       }, 1000)
 
@@ -137,12 +140,21 @@ export default {
 
       let selectedPosition = null
 
+      if(this.latLngObjects.length == 0){
+        for(let photo of this.partie.serie.photos) {
+          this.latLngObjects.push([photo.lat, photo.lng])
+        }
+      }
+
+      this.$refs.map.mapObject.fitBounds(this.latLngObjects)
+
       this.$refs.map.mapObject.on('click', e => {
 
           if(this.answered == true){
+            console.log('Already answered')
             return false
           }
-
+          console.log('not answered yet')
           this.answered = true
 
           if(this.markers != null){
@@ -165,6 +177,9 @@ export default {
           }, d)
 
          this.markers = L.layerGroup([selectedMarker, L.marker([e.latlng.lat, e.latlng.lng])]).addTo(this.$refs.map.mapObject)
+
+         console.log(selectedMarker.getLatLng())
+         this.$refs.map.mapObject.fitBounds([[selectedMarker.getLatLng().lat, selectedMarker.getLatLng().lng], [e.latlng.lat, e.latlng.lng]])
 
          /* Calcul du temps restant en seconde */
          let t = (this.maxNbSeconds()) - this.value
@@ -245,6 +260,7 @@ export default {
           this.markers.clearLayers()
           this.answered = false
           this.value = this.maxNbSeconds()
+          this.$refs.map.mapObject.fitBounds(this.latLngObjects)
      }
    
  },
