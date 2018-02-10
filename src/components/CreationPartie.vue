@@ -7,7 +7,7 @@
                 <v-card>
                   <v-card-title primary-title>
                     <div>
-                      <h3 class="headline mb-0">{{serie.name}} - {{serie.city.name}}</h3>
+                      <h3 class="headline mb-0"></h3>
                     </div>
                   </v-card-title>
 
@@ -23,6 +23,7 @@
               </v-flex>
             </v-layout>
           </v-flex>
+          <h1 v-if="series.length == 0">Aucune serie disponible. Reviens plus tard</h1>
         </v-layout>
         <v-dialog v-model="modal" max-width="500px">
             <v-card>
@@ -55,7 +56,6 @@ export default {
 	data () {
 		return {
             serie_name: '',
-            series: [],
             serie_id: null,
             modal: false,
             pseudo: '',
@@ -66,16 +66,12 @@ export default {
 		}
 	},
     created(){
-        
+        this.$store.dispatch('loadSeries').then(res => {
+
+        }).catch(e => {
+            console.log(e)
+        })
     },
-	mounted (){
-        window.axios.get('series')
-			.then((response) => {
-                this.series = response.data
-			}).catch ((error) => {
-				console.log(error)
-            })
-	},
 	methods:{
         getCount(){
             this.$store.dispatch('count', this.serie_id)
@@ -141,7 +137,7 @@ export default {
         }
     },
     computed:{
-        ...mapGetters({count: 'getCount'})
+        ...mapGetters({series: 'getSeries'})
     }
 }
 </script>

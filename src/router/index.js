@@ -6,10 +6,12 @@ import FinPartie from '@/components/FinPartie'
 
 Vue.use(Router)
 
-export default new Router({
-    routes: [{
+const router = new Router({
+    routes: [
+        {
             path: '/creationpartie',
-            component: CreationPartie
+            component: CreationPartie,
+            name: 'create_partie'
         },
         {
             path: '/jouerpartie',
@@ -27,3 +29,15 @@ export default new Router({
         }
     ]
 })
+
+export default router
+
+// router.beforeEach((to, from, next) => {
+//     if (to.) {
+//         // You can use store variable here to access globalError or commit mutation 
+//         next("/Login")
+//     } else {
+//         next()
+//     }
+// })
+

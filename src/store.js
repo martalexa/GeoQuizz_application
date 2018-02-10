@@ -12,7 +12,8 @@ const initialState = {
     partie: [],
     finished: false,
     score: [],
-    count: null
+    count: null,
+    series: []
 };
 
 export default new Vuex.Store({
@@ -21,8 +22,10 @@ export default new Vuex.Store({
         token: false,
         partie: null,
         finished: false,
-        score: [],
-        count: null
+        score: null,
+        count: null,
+        series: [],
+
     },
     mutations: {
         setToken(state, token) {
@@ -48,6 +51,9 @@ export default new Vuex.Store({
         },
         setCount(state, c) {
             state.count = c
+        },
+        setSeries(state, obj) {
+            state.series = obj
         }
     },
     getters: {
@@ -59,12 +65,19 @@ export default new Vuex.Store({
         },
         getCount: (state) => {
             return state.count
+        },
+        getSeries: (state) => {
+            return state.series
+        },
+        isFinished: (state) => {
+            return state.finished
         }
     },
     actions: {
         createPartie({ commit }, partie) {
             return api.post('parties', partie).then((res) => {
                 commit('setPartie', res.data)
+                commit('setFinished', false)
                 return Promise.resolve(res)
             }).catch((err) => {
                 return Promise.reject(err)
@@ -77,13 +90,7 @@ export default new Vuex.Store({
                 return Promise.reject(err)
             })
         },
-        finish({ commit, state }, new_score) {
-            // if(state.finished == false){
-            //     commit('setScore', new_score)
-            //     //commit('setFinished', true)
-            // }else{
-            //     return Promise.reject('La partie est déjà finie')
-            // }
+        finish({ commit, state}, new_score) {
             commit('setScore', new_score)
             return Promise.resolve('OK')
 
@@ -99,6 +106,26 @@ export default new Vuex.Store({
             }).catch((err) => {
                 return Promise.reject(err)
             })
+        },
+        loadSeries({commit}) {
+            return api.get('series').then(res => {
+                commit('setSeries', res.data)
+                return Promise.resolve(res)
+            }).catch((err) => {
+                return Promise.reject(err)
+            })
+        },
+        sendScore({commit, state}, global_score) {
+            if(state.partie != null){
+                return api.patch('parties/'+state.partie.token+'/score', {score: global_score.final_score}).then(res => {
+                    commit('setScore', global_score)
+                    commit('setFinished', true)
+                    return Promise.resolve('Bien enregistré')
+                }).catch(e => {
+                    return Promise.reject(e)
+                })
+            }
+            return Promise.reject('Aucune partie en cours')
         }
     }
 })
