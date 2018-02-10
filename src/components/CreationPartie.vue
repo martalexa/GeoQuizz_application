@@ -7,7 +7,7 @@
                 <v-card>
                   <v-card-title primary-title>
                     <div>
-                      <h3 class="headline mb-0"></h3>
+                      <h3 class="headline mb-0">{{serie.name}}</h3>
                     </div>
                   </v-card-title>
 
@@ -29,7 +29,7 @@
             <v-card>
                 <v-card-title>
                     <h2>{{serie_name}}</h2><br>
-                    
+
                 </v-card-title>
                 <v-card-title v-show="alertCreation">
                     <v-alert color="error" icon="warning" value="true" dismissible v-model="alertCreation">
@@ -81,7 +81,7 @@ export default {
                         var m = (( this % n) + n) % n;
                         return m < 0 ? m + Math.abs(n) : m;
                     };
-                    if(parseInt(res.data).mod(2)===0){
+                    if(parseInt(res.data).mod(5)===0){
                         for(let i = 10;i<res.data;i=i+5){
                             this.choix.push({'text':i})
                         }
@@ -133,7 +133,7 @@ export default {
             }else{
                 this.alertCreation = true
             }
-            
+
         }
     },
     computed:{
