@@ -39,7 +39,7 @@
 
 
       <v-flex lg7 offset-lg1 xs12>
-        <div class="column container" id="carte" @click="chrono">
+        <div class="column container" id="carte">
           <div class="carte">
             <!-- Map -->
             <v-map ref="map" :zoom="partie.serie.city.zoom_level" :center="[ partie.serie.city.lat, partie.serie.city.lng]">
@@ -49,15 +49,6 @@
           </div>
         </div>
       </v-flex>
-      <div v-if="partie != undefined">
-        <p>Paliers</p>
-        <p v-for="palier in partie.serie.rules.paliers">{{palier.coef}}</p>
-      </div>
-      <div v-if="partie != undefined">
-        <p>Times</p>
-        <p v-for="time in partie.serie.rules.times">{{time.nb_seconds}}</p>
-      </div>
-
     </v-layout>
   </v-container>
 </section>
@@ -221,9 +212,6 @@ export default {
     },
     deg2rad(deg){
       return deg * (Math.PI/180)
-    },
-    chrono(){
-
     },
     precisionRound(number, precision) {
       var factor = Math.pow(10, precision);

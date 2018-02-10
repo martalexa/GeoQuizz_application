@@ -28,8 +28,13 @@
         <v-dialog v-model="modal" max-width="500px">
             <v-card>
                 <v-card-title>
-                    <h2>{{serie_name}}</h2>
-                    <p>{{erreur}}</p>
+                    <h2>{{serie_name}}</h2><br>
+                    
+                </v-card-title>
+                <v-card-title v-show="alertCreation">
+                    <v-alert color="error" icon="warning" value="true" dismissible v-model="alertCreation">
+                        Replissez tout les champs !!
+                    </v-alert>
                 </v-card-title>
                 <v-card-text>
                     <form>
@@ -56,7 +61,8 @@ export default {
             pseudo: '',
             nbImages: null,
             choix: [],
-            erreur: ''
+            erreur: '',
+            alertCreation: false
 		}
 	},
     created(){
@@ -122,10 +128,10 @@ export default {
                 }).then((res) => {
                     this.$router.push({name: 'jouer'})
                 }).catch((err) => {
-                    console.log('Fail to create the partie')
+                    console.log('Failed to create the game session')
                 })
             }else{
-                this.erreur = 'Remplissez tous les champs !!'
+                this.alertCreation = true
             }
             
         }
